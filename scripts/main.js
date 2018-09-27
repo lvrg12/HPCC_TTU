@@ -2,6 +2,7 @@ var container, camera, scene, renderer, effect, clock, controls
 var raycaster
 var cameraPositions;
 var pointer;
+var json;
 
 var objects = [];
 var moveForward = false;
@@ -23,6 +24,7 @@ function init()
     container = document.createElement( 'div' );
     document.body.appendChild( container );
 
+    loadJSON();
     initCamera();
     initPointer();
     initScene();
@@ -35,6 +37,19 @@ function init()
 
     window.requestAnimationFrame( render );
     window.addEventListener( 'resize', onWindowResize, false );
+}
+
+function loadJSON()
+{
+    $.ajax({
+        type: 'GET',
+        url: "../data/hpcc_data__32_.json",
+        async: false,
+        dataType: 'json',
+        success: function (data) {
+          json = data
+        }
+      });
 }
 
 function initCamera()
