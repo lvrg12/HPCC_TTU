@@ -19,7 +19,7 @@ function Quanah()
         material = new THREE.LineBasicMaterial( { color: 0x000000 } );
         rack = new THREE.LineSegments( geometry, material );
 
-        for( var i=1; i<=height/2; i++)
+        for( var i=1; i<=height; i++)
         {
             for( var j=1; j<=2; j++)
             {
@@ -42,7 +42,7 @@ function Quanah()
         //         temperature = avg_temperature(json[key][key2]);
         // }
 
-        geometry = new THREE.BoxGeometry( depth, 0.5, width/2 );
+        geometry = new THREE.BoxGeometry( depth, 1, width/2 );
         material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
         cpu = new THREE.Mesh( geometry, material );
 
@@ -65,11 +65,11 @@ function Quanah()
             z = width/2-width/4;
             if( cpu_num == 1 )
             {
-                y = height-host_num+1-0.1;
+                y = height-host_num;
             }
             else
             {
-                y = height-host_num+0.5-0.1;
+                y = height-host_num+1;
             }
         }
 
