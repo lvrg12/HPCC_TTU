@@ -43,7 +43,7 @@ function loadJSON()
 {
     $.ajax({
         type: 'GET',
-        url: "../data/hpcc_data__32_.json",
+        url: "data/hpcc_data__32_.json",
         async: false,
         dataType: 'json',
         success: function (data) {
