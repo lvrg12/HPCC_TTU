@@ -7,30 +7,52 @@ function Quanah()
 
     console.log(json);
 
-    for( var i=0; i<3; i++ )
+    for( var rack_num=1; rack_num<=10; rack_num++ )
     {
-        addRack( i+1, 0, height/2 + 0.1, separation*i );
-    
+        addRack( rack_num, 0, height/2, separation*rack_num );
     }
 
     function addRack( rack_num, x, y, z)
     {
         geometry = new THREE.BoxLineGeometry( depth, height, width, 1, 1, 2 );
-        //geometry = new THREE.BoxLineGeometry( depth, height, width, 1, 60, 2 );
         material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 5 } );
         rack = new THREE.LineSegments( geometry, material );
 
-        for( var i=1; i<=height; i++)
+        for( var host_num=1; host_num<=60; host_num++ )
         {
-            for( var j=1; j<=2; j++)
-            {
-                rack.add(addCPU(rack_num,i*j,1));
-                rack.add(addCPU(rack_num,i*j,2));
-            }
+            rack.add(addHost(rack_num,host_num));
+            // break;
         }
 
-        rack.position.set( x, y, z );
+        rack.position.set( x, y + 0.1, z );
         scene.add( rack );
+    }
+
+    function addHost( rack_num, host_num )
+    {
+        geometry = new THREE.BoxLineGeometry( depth, 1, width/2, 1, 1, 1 );
+        material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
+        host = new THREE.LineSegments( geometry, material );
+
+        for( var cpu_num=1; cpu_num<=2; cpu_num++ )
+            host.add(addCPU(rack_num,host_num,cpu_num));
+
+
+        if( host_num%2 == 1 )
+        {
+            y = height/2-host_num/2-0.5;
+            z = 0-width/4;
+        }
+        else
+        {
+            y = height/2-host_num/2;
+            z = width/4;
+        }
+
+        host.position.set( 0, y + 0.5, z );
+
+        return host;
+
     }
 
     function addCPU( rack_num, host_num, cpu_num )
@@ -47,7 +69,7 @@ function Quanah()
             temperature = 0;
         }
 
-        geometry = new THREE.BoxGeometry( depth, 1, width/2 );
+        geometry = new THREE.BoxGeometry( depth, 0.5, width/2 );
         material = new THREE.MeshBasicMaterial( { color: color_funct(temperature) } );
         cpu = new THREE.Mesh( geometry, material );
 
@@ -58,33 +80,16 @@ function Quanah()
         edges = new THREE.LineSegments( edges_geometry, edges_material );
         cpu.add( edges );
 
-
-        if( host_num%2 == 0 )
+        if( cpu_num == 1 )
         {
-            z = 0-width/4;
-            if( cpu_num == 1 )
-            {
-                y = height/2-host_num/2+1-0.5;
-            }
-            else
-            {
-                y = height/2-host_num/2+0-0.5;
-            }
+            y = 0.25;
         }
         else
         {
-            z = width/2-width/4;
-            if( cpu_num == 1 )
-            {
-                y = height/2-host_num+1-0.5;
-            }
-            else
-            {
-                y = height/2-host_num+0-0.5;
-            }
+            y = -0.25;
         }
 
-        cpu.position.set( 0, y, z );
+        cpu.position.set( 0, y, 0 );
 
         return cpu;
     }
