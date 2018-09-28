@@ -166,7 +166,7 @@ function initFloor()
 {
     var floorGeometry = new THREE.PlaneBufferGeometry( 100, 100, 100, 100 );
     floorGeometry.rotateX( - Math.PI / 2 );
-    var floor = new THREE.Mesh( floorGeometry, new THREE.MeshBasicMaterial( { color: 0xfdfdfd } ) );
+    var floor = new THREE.Mesh( floorGeometry, new THREE.MeshBasicMaterial( { color: 0xdddddd } ) );
     scene.add( floor );
 }
 

@@ -7,10 +7,10 @@ function Quanah()
 
     console.log(json);
 
-    for( var i=0; i<10; i++ )
+    for( var i=0; i<3; i++ )
     {
         addRack( i+1, 0, height/2 + 0.1, separation*i );
-        break;
+    
     }
 
     function addRack( rack_num, x, y, z)
@@ -28,22 +28,28 @@ function Quanah()
             }
         }
 
-        rack.geometry.translate( x, y, z );
+        rack.position.set( x, y, z );
         scene.add( rack );
     }
 
     function addCPU( rack_num, host_num, cpu_num )
     {
-        // key = "compute-"+rack_num+"-"+host_num;
-        // if( json[key] )
-        // {
-        //     key2 = "arrTemperatureCPU"+cpu_num;
-        //     if( json[key][key2] )
-        //         temperature = avg_temperature(json[key][key2]);
-        // }
+        key = "compute-"+rack_num+"-"+host_num;
+        if( json[key] )
+        {
+            key2 = "arrTemperatureCPU"+cpu_num;
+            if( json[key][key2] )
+                temperature = avg_temperature(json[key][key2]);
+        }
+        else
+        {
+            temperature = 0;
+        }
+
+        console.log(temperature);
 
         geometry = new THREE.BoxGeometry( depth, 1, width/2 );
-        material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+        material = new THREE.MeshBasicMaterial( {color: tempColor(temperature)} );
         cpu = new THREE.Mesh( geometry, material );
 
         // y = ( cpu_num == 1 )? height-host_num*(cpu_num-1)-0.51 : height-host_num*(cpu_num-1.5)-0.51;
@@ -53,11 +59,11 @@ function Quanah()
             z = 0-width/4;
             if( cpu_num == 1 )
             {
-                y = height-host_num/2+1-0.1;
+                y = height/2-host_num/2+1-0.5;
             }
             else
             {
-                y = height-host_num/2+0.5-0.1;
+                y = height/2-host_num/2+0-0.5;
             }
         }
         else
@@ -65,16 +71,48 @@ function Quanah()
             z = width/2-width/4;
             if( cpu_num == 1 )
             {
-                y = height-host_num;
+                y = height/2-host_num+1-0.5;
             }
             else
             {
-                y = height-host_num+1;
+                y = height/2-host_num+0-0.5;
             }
         }
 
         cpu.position.set( 0, y, z );
 
         return cpu;
+    }
+}
+
+function avg_temperature(arr)
+{
+    if( arr.length == 0 )
+        return 0;
+    else
+    {
+        sum = 0;
+        for( var i=0; i<arr.length; i++ )
+        {
+            sum+=arr[i];
+        }
+        return sum/arr.length;
+    }
+}
+
+function tempColor(t)
+{
+    gradient = [0xFFFFFF,0xFFECEC,0xFFDADA,0xFFC8C8,0xFFB6B6,0xFFA3A3,
+                0xFF9191,0xFF7F7F,0xFF6D6D,0xFF5B5B,0xFF4848,0xFF3636,
+                0xFF2424,0xFF1212,0xFF0000]
+
+    t = Math.ceil(t);
+    if( t==0 )
+    {
+        return 0xFFFFFF;
+    }
+    else
+    {
+        return gradient[Math.round((t-30)/3.6)]
     }
 }
