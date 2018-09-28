@@ -5,8 +5,6 @@ function Quanah()
     width = 15;
     separation = width + width*0.2;
 
-    console.log(json);
-
     for( var rack_num=1; rack_num<=10; rack_num++ )
     {
         addRack( rack_num, 0, height/2, separation*rack_num );
@@ -23,6 +21,8 @@ function Quanah()
             rack.add(addHost(rack_num,host_num));
             // break;
         }
+
+        addLabel( "Rack " + rack_num, rack );
 
         rack.position.set( x, y + 0.1, z );
         scene.add( rack );
@@ -110,30 +110,26 @@ function avg_temperature(arr)
     }
 }
 
-function tempColor(t)
+function addLabel( text, rack )
 {
-    gradient = [0xFFFFFF,0xFFECEC,0xFFDADA,0xFFC8C8,0xFFB6B6,0xFFA3A3,
-                0xFF9191,0xFF7F7F,0xFF6D6D,0xFF5B5B,0xFF4848,0xFF3636,
-                0xFF2424,0xFF1212,0xFF0000];
+    var loader = new THREE.FontLoader();
 
-    var arrTemp = [20, 60, 80, 100];
-    var arrColor = ['#44f', '#1a9850','#fee08b', '#d73027'];
-    
-    var color = d3.scaleLinear()
-        .domain(arrTemp)
-        .range(arrColor)
-        .interpolate(d3.interpolateHcl);
+    material_text = new THREE.MeshPhongMaterial( { color: 0x000000 } );
 
-    console.log( color(20) );
+    loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font ) {
 
-    
-    t = Math.ceil(t);
-    if( t==0 )
-    {
-        return 0x000000;
-    }
-    else
-    {
-        return gradient[Math.round((t-30)/3.6)]
-    }
+        var geometry = new THREE.TextGeometry( text, {
+            font: font,
+            size: 3,
+            height: 0.5,
+            curveSegments: 12,
+            bevelEnabled: false
+        } );
+
+        var textMesh = new THREE.Mesh( geometry, material_text );
+        textMesh.position.set( 0, 20, -5 );
+        textMesh.rotation.y = -Math.PI/2;
+        rack.add( textMesh );
+    } );
+
 }
