@@ -13,13 +13,14 @@ function Quanah()
     function addRack( rack_num, x, y, z)
     {
         geometry = new THREE.BoxLineGeometry( depth, height, width, 1, 1, 2 );
-        material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 5 } );
+        material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
         rack = new THREE.LineSegments( geometry, material );
 
         for( var host_num=1; host_num<=60; host_num++ )
         {
-            rack.add(addHost(rack_num,host_num));
-            // break;
+            key = "compute-"+rack_num+"-"+host_num;
+            if( json[key] )
+                rack.add(addHost(rack_num,host_num,key));
         }
 
         addLabel( "Rack " + rack_num, "rack", rack );
@@ -28,14 +29,25 @@ function Quanah()
         scene.add( rack );
     }
 
-    function addHost( rack_num, host_num )
+    function addHost( rack_num, host_num, key )
     {
         geometry = new THREE.BoxLineGeometry( depth, 1, width/2, 1, 1, 1 );
         material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
         host = new THREE.LineSegments( geometry, material );
 
         for( var cpu_num=1; cpu_num<=2; cpu_num++ )
-            host.add(addCPU(rack_num,host_num,cpu_num));
+        {
+            key2 = "arrTemperatureCPU"+cpu_num;
+            if( json[key][key2] )
+            {
+                temperature = avg_temperature(json[key][key2]);
+                host.add(addCPU(cpu_num,temperature));
+            }
+            // else
+            // {
+            //     host.add(addCPU(cpu_num,0));
+            // }
+        }
 
 
         if( host_num%2 == 1 )
@@ -57,20 +69,8 @@ function Quanah()
 
     }
 
-    function addCPU( rack_num, host_num, cpu_num )
+    function addCPU( cpu_num, temperature )
     {
-        key = "compute-"+rack_num+"-"+host_num;
-        if( json[key] )
-        {
-            key2 = "arrTemperatureCPU"+cpu_num;
-            if( json[key][key2] )
-                temperature = avg_temperature(json[key][key2]);
-        }
-        else
-        {
-            temperature = 0;
-        }
-
         geometry = new THREE.BoxGeometry( depth, 0.5, width/2 );
         material = new THREE.MeshBasicMaterial( { color: color_funct(temperature) } );
         cpu = new THREE.Mesh( geometry, material );
@@ -122,7 +122,7 @@ function addLabel( text, type, obj )
 
     if( type == "rack" )
     {
-        size = 3, x = 2.5, y = 17, z = 6;
+        size = 1.5, x = 2.5, y = 17, z = 6;
     }
     else if( type == "host1" )
     {
