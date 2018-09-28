@@ -109,7 +109,7 @@ function tempColor(t)
     t = Math.ceil(t);
     if( t==0 )
     {
-        return 0xFFFFFF;
+        return 0x000000;
     }
     else
     {
