@@ -3,6 +3,7 @@ var raycaster
 var cameraPositions;
 var pointer;
 var json;
+var color_funct;
 
 var objects = [];
 var moveForward = false;
@@ -32,6 +33,7 @@ function init()
     initControl();
     initFloor();
     initRoom();
+    initColorRange();
     Quanah()
     initRenderer();
 
@@ -160,6 +162,18 @@ function initRoom()
     // );
     // room.geometry.translate( 0, 25, 0 );
     // scene.add( room );
+}
+
+function initColorRange()
+{
+    arrTemp = [20, 60, 80, 100];
+    arrColor = ['#44f', '#1a9850','#fee08b', '#d73027'];
+    
+    color_funct = d3.scaleLinear()
+        .domain(arrTemp)
+        .range(arrColor)
+        .interpolate(d3.interpolateHcl);
+
 }
 
 function initFloor()
