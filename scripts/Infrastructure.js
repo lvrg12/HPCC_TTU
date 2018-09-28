@@ -122,7 +122,7 @@ function addLabel( text, type, obj )
 
     if( type == "rack" )
     {
-        size = 1.5, x = 2.5, y = 17, z = 6;
+        size = 1.5, x = 2.5, y = 16, z = 3;
     }
     else if( type == "host1" )
     {
