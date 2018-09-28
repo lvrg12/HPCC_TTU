@@ -178,10 +178,10 @@ function initColorRange()
 
 function initFloor()
 {
-    var floorGeometry = new THREE.PlaneBufferGeometry( 50, -200, 50, 50 );
+    var floorGeometry = new THREE.PlaneBufferGeometry( 50, 220, 50, 50 );
     floorGeometry.rotateX( - Math.PI / 2 );
     var floor = new THREE.Mesh( floorGeometry, new THREE.MeshBasicMaterial( { color: 0xdddddd } ) );
-    floor.position.set( 0, 0, 100  );
+    floor.position.set( 0, 0, -110  );
     scene.add( floor );
 }
 
