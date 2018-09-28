@@ -3,11 +3,11 @@ function Quanah()
     height = 30;
     depth = 5;
     width = 15;
-    separation = width + width*0.2;
+    separation = width + width*0.3;
 
     for( var rack_num=1; rack_num<=10; rack_num++ )
     {
-        addRack( rack_num, 0, height/2, separation*rack_num );
+        addRack( rack_num, 0, height/2, -1 * separation*rack_num );
     }
 
     function addRack( rack_num, x, y, z)
@@ -22,7 +22,7 @@ function Quanah()
             // break;
         }
 
-        addLabel( "Rack " + rack_num, rack );
+        addLabel( "Rack " + rack_num, "rack", rack );
 
         rack.position.set( x, y + 0.1, z );
         scene.add( rack );
@@ -40,11 +40,13 @@ function Quanah()
 
         if( host_num%2 == 1 )
         {
+            addLabel( "Host " + host_num, "host1", host );
             y = height/2-host_num/2-0.5;
             z = 0-width/4;
         }
         else
         {
+            addLabel( "Host " + host_num, "host2", host );
             y = height/2-host_num/2;
             z = width/4;
         }
@@ -110,26 +112,45 @@ function avg_temperature(arr)
     }
 }
 
-function addLabel( text, rack )
+function addLabel( text, type, obj )
 {
     var loader = new THREE.FontLoader();
 
     material_text = new THREE.MeshPhongMaterial( { color: 0x000000 } );
 
+    var size, x, y, z;
+
+    if( type == "rack" )
+    {
+        size = 3, x = 2.5, y = 17, z = 6;
+    }
+    else if( type == "host1" )
+    {
+        size = 0.60, x = 2.5, y = -0.5, z = 11;
+    }
+    else if( type == "host2" )
+    {
+        size = 0.60, x = 2.5, y = -0.5, z = -4;
+    }
+    else
+    {
+        size = 0.5, x = 2.5, y = 20, z = -6;
+    }
+
     loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font ) {
 
         var geometry = new THREE.TextGeometry( text, {
             font: font,
-            size: 3,
-            height: 0.5,
+            size: size,
+            height: 0.05,
             curveSegments: 12,
             bevelEnabled: false
         } );
 
         var textMesh = new THREE.Mesh( geometry, material_text );
-        textMesh.position.set( 0, 20, -5 );
-        textMesh.rotation.y = -Math.PI/2;
-        rack.add( textMesh );
+        textMesh.position.set( x, y, z );
+        textMesh.rotation.y = Math.PI/2;
+        obj.add( textMesh );
     } );
 
 }
