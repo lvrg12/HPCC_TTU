@@ -7,8 +7,10 @@ function Quanah()
 
     for( var rack_num=1; rack_num<=10; rack_num++ )
     {
-        addRack( rack_num, 0, height/2, -1 * separation*rack_num );
+        addRack( rack_num, -15, height/2, -1 * separation*rack_num );
     }
+
+    // add component functions
 
     function addRack( rack_num, x, y, z)
     {
@@ -20,16 +22,17 @@ function Quanah()
         {
             key = "compute-"+rack_num+"-"+host_num;
             if( json[key] )
-                rack.add(addHost(rack_num,host_num,key));
+                rack.add(addHost(host_num,key));
         }
 
         addLabel( "Rack " + rack_num, "rack", rack );
 
         rack.position.set( x, y + 0.1, z );
         scene.add( rack );
+
     }
 
-    function addHost( rack_num, host_num, key )
+    function addHost( host_num, key )
     {
         geometry = new THREE.BoxLineGeometry( depth, 1, width/2, 1, 1, 1 );
         material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
@@ -43,10 +46,6 @@ function Quanah()
                 temperature = avg_temperature(json[key][key2]);
                 host.add(addCPU(cpu_num,temperature));
             }
-            // else
-            // {
-            //     host.add(addCPU(cpu_num,0));
-            // }
         }
 
 
@@ -122,19 +121,19 @@ function addLabel( text, type, obj )
 
     if( type == "rack" )
     {
-        size = 1.5, x = 2.5, y = 16, z = 3;
+        size = 1.5, x = 2.51, y = 16, z = 3;
     }
     else if( type == "host1" )
     {
-        size = 0.60, x = 2.5, y = -0.5, z = 11;
+        size = 0.60, x = 2.51, y = -0.5, z = 11;
     }
     else if( type == "host2" )
     {
-        size = 0.60, x = 2.5, y = -0.5, z = -4;
+        size = 0.60, x = 2.51, y = -0.5, z = -4;
     }
     else
     {
-        size = 0.5, x = 2.5, y = 20, z = -6;
+        size = 0.5, x = 2.51, y = 20, z = -6;
     }
 
     loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font ) {
@@ -142,7 +141,7 @@ function addLabel( text, type, obj )
         var geometry = new THREE.TextGeometry( text, {
             font: font,
             size: size,
-            height: 0.05,
+            height: 0,
             curveSegments: 12,
             bevelEnabled: false
         } );

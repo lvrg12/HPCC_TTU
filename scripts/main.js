@@ -31,7 +31,7 @@ function init()
     initScene();
     initLight();
     initControl();
-    initFloor();
+    // initFloor();
     initRoom();
     initColorRange();
     Quanah()
@@ -56,8 +56,8 @@ function loadJSON()
 
 function initCamera()
 {
-    camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 100 );
-    camera.position.set( -20, 5, -20 );
+    camera = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, 0.1, 250 );
+    camera.position.set( 20, 7.5, -5 );
 }
 
 function initPointer()
@@ -154,16 +154,6 @@ function initControl()
     raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
 }
 
-function initRoom()
-{
-    // room = new THREE.LineSegments(
-    //     new THREE.BoxLineGeometry( 100, 51, 100, 25, 25, 25 ),
-    //     new THREE.LineBasicMaterial( { color: 0x808080 } )
-    // );
-    // room.geometry.translate( 0, 25, 0 );
-    // scene.add( room );
-}
-
 function initColorRange()
 {
     arrTemp = [20, 60, 80, 100];
@@ -174,6 +164,29 @@ function initColorRange()
         .range(arrColor)
         .interpolate(d3.interpolateHcl);
 
+}
+
+function initRoom()
+{
+    geometry = new THREE.BoxGeometry( 50, 40, 220 );
+
+    textures = ["whiteblockwall","whiteblockwall","whiteceiling","silvermetalmeshfloor","whiteblockwall","whiteblockwall"];
+    repeats = [[15,2],[15,2],[5,25],[5,12],[2,2],[2,2]];
+    materials = [null,null,null,null,null,null];
+
+    for( var i=0; i<6; i++ )
+    {
+        texture = new THREE.TextureLoader().load( "media/textures/" + textures[i] + ".jpg" );
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(repeats[i][0],repeats[i][1]);
+        materials[i] = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide, map: texture } );
+    }
+
+    // material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide, envMap: texture } );
+    room = new THREE.Mesh( geometry, materials );
+    room.geometry.translate( 0, 20, -110 );
+    scene.add( room );
 }
 
 function initFloor()
