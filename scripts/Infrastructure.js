@@ -1,28 +1,33 @@
 function Quanah()
 {
-    height = 30;
+    height = HOST_NUM/2;
     depth = 5;
     width = 15;
     separation = width + width*0.3;
 
-    for( var rack_num=1; rack_num<=10; rack_num++ )
+    for( var rack_num=1; rack_num<=RACK_NUM; rack_num++ )
     {
-        addRack( rack_num, -15, height/2, -1 * separation*rack_num );
+        addRack( rack_num, -40, height/2, -1 * separation*rack_num );
     }
 
     // add component functions
 
     function addRack( rack_num, x, y, z)
     {
+        hostObj[rack_num] = {};
+
         geometry = new THREE.BoxLineGeometry( depth, height, width, 1, 1, 2 );
         material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
         rack = new THREE.LineSegments( geometry, material );
 
-        for( var host_num=1; host_num<=60; host_num++ )
+        for( var host_num=1; host_num<=HOST_NUM; host_num++ )
         {
             key = "compute-"+rack_num+"-"+host_num;
             if( json[key] )
-                rack.add(addHost(host_num,key));
+            {
+                hostObj[rack_num][host_num] = {};
+                rack.add(addHost(rack_num,host_num,key));
+            }
         }
 
         addLabel( "Rack " + rack_num, "rack", rack );
@@ -32,19 +37,20 @@ function Quanah()
 
     }
 
-    function addHost( host_num, key )
+    function addHost( rack_num, host_num, key )
     {
         geometry = new THREE.BoxLineGeometry( depth, 1, width/2, 1, 1, 1 );
         material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
         host = new THREE.LineSegments( geometry, material );
 
-        for( var cpu_num=1; cpu_num<=2; cpu_num++ )
+        for( var cpu_num=1; cpu_num<=CPU_NUM; cpu_num++ )
         {
             key2 = "arrTemperatureCPU"+cpu_num;
             if( json[key][key2] )
             {
-                temperature = avg_temperature(json[key][key2]);
-                host.add(addCPU(cpu_num,temperature));
+                temperature = json[key][key2][0];
+                hostObj[rack_num][host_num][cpu_num] = addCPU(cpu_num,temperature);
+                host.add(hostObj[rack_num][host_num][cpu_num]);
             }
         }
 

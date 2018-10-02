@@ -4,7 +4,58 @@ var cameraPositions;
 var pointer;
 var json;
 var color_funct;
+var hostObj = {};
+var RACK_NUM = 10;
+var HOST_NUM = 60;
+var CPU_NUM = 2;
 
+// HPCC
+var hosts = [];
+var hostResults = {};
+var links =[];
+var node,link;
+
+var simulation, link, node;
+var dur = 400;  // animation duration
+var startDate = new Date("4/1/2018");
+var endtDate = new Date("1/1/2019");
+var today = new Date();
+
+var maxHostinRack= 60;
+var h_rack = 950;
+var width = 200;
+var w_rack = (width-23)/10-1;
+var w_gap =0;
+var node_size = 6;
+var sHeight=200;  // Summary panel height
+var top_margin = sHeight+80;  // Start rack spiatial layout
+
+
+var users = [];
+var racks = [];
+
+var xTimeScale;
+var baseTemperature =60;
+
+var interval2;
+var simDuration =1;
+var numberOfMinutes = 6*60;
+var isRealtime = false;
+if (isRealtime){
+    simDuration = 1000;
+    numberOfMinutes = 6*60;
+}
+
+
+var charType = "Heatmap";
+//***********************
+var serviceList = ["Temperature","CPU_load","Memory_usage","Fans_health","Power_consumption"]
+var initialService = "Temperature";
+var selectedService = "Temperature";
+
+
+
+// Controller
 var objects = [];
 var moveForward = false;
 var moveBackward = false;
@@ -31,14 +82,16 @@ function init()
     initScene();
     initLight();
     initControl();
-    // initFloor();
     initRoom();
     initColorRange();
     Quanah()
+    // initHPCC();
     initRenderer();
 
     window.requestAnimationFrame( render );
     window.addEventListener( 'resize', onWindowResize, false );
+
+    // request();
 }
 
 function loadJSON()
@@ -168,10 +221,10 @@ function initColorRange()
 
 function initRoom()
 {
-    geometry = new THREE.BoxGeometry( 50, 40, 220 );
+    geometry = new THREE.BoxGeometry( 100, 40, 220 );
 
     textures = ["whiteblockwall","whiteblockwall","whiteceiling","silvermetalmeshfloor","whiteblockwall","whiteblockwall"];
-    repeats = [[15,2],[15,2],[5,25],[5,12],[2,2],[2,2]];
+    repeats = [[15,2],[15,2],[10,25],[10,12],[4,2],[4,2]];
     materials = [null,null,null,null,null,null];
 
     for( var i=0; i<6; i++ )
@@ -180,7 +233,7 @@ function initRoom()
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(repeats[i][0],repeats[i][1]);
-        materials[i] = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide, map: texture } );
+        materials[i] = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.BackSide, map: texture } );
     }
 
     // material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide, envMap: texture } );
@@ -189,13 +242,74 @@ function initRoom()
     scene.add( room );
 }
 
-function initFloor()
+function initHPCC()
 {
-    var floorGeometry = new THREE.PlaneBufferGeometry( 50, 220, 50, 50 );
-    floorGeometry.rotateX( - Math.PI / 2 );
-    var floor = new THREE.Mesh( floorGeometry, new THREE.MeshBasicMaterial( { color: 0xdddddd } ) );
-    floor.position.set( 0, 0, -110  );
-    scene.add( floor );
+    for (var att in hostList.data.hostlist) {
+        var h = {};
+        h.name = att;
+        h.hpcc_rack = +att.split("-")[1];
+        h.hpcc_node = +att.split("-")[2].split(".")[0];
+        h.index = hosts.length;
+
+        // to contain the historical query results
+        hostResults[h.name] = {};
+        hostResults[h.name].index = h.index;
+        hostResults[h.name].arr = [];
+        hostResults[h.name].arrTemperature = [];  
+        hostResults[h.name].arrCPU_load = [];
+        hostResults[h.name].arrMemory_usage = [];
+        hostResults[h.name].arrFans_health= [];
+        hostResults[h.name].arrPower_usage= [];
+        hosts.push(h);
+        // console.log(att+" "+h.hpcc_rack+" "+h.hpcc_node);
+
+        // Compute RACK list
+        var rackIndex = isContainRack(racks, h.hpcc_rack);
+        if (rackIndex >= 0) {  // found the user in the users list
+            racks[rackIndex].hosts.push(h);
+        }
+        else {
+            var obj = {};
+            obj.id = h.hpcc_rack;
+            obj.hosts = [];
+            obj.hosts.push(h);
+            racks.push(obj);
+        }
+        // Sort RACK list
+        racks = racks.sort(function (a, b) {
+            if (a.id > b.id) {
+                return 1;
+            }
+            else return -1;
+        })
+    }
+    for (var i = 0; i < racks.length; i++) {
+        racks[i].hosts.sort(function (a, b) {
+            if (a.hpcc_node > b.hpcc_node) {
+                return 1;
+            }
+            else return -1;
+        })
+
+    }
+    hosts.sort(function (a, b) {
+        if (a.hpcc_rack*1000+a.hpcc_node > b.hpcc_rack*1000+b.hpcc_node) {
+            return 1;
+        }
+        else return -1;
+    });
+
+    function isContainRack(array, id)
+    {
+        var foundIndex = -1;
+        for(var i = 0; i < array.length; i++) {
+            if (array[i].id == id) {
+                foundIndex = i;
+                break;
+            }
+        }
+        return foundIndex;
+    }
 }
 
 function initRenderer()
