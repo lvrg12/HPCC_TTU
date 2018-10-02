@@ -10,61 +10,37 @@
 		<meta http-equiv="origin-trial" data-feature="WebXR Device API (For Chrome M69+)" data-expires="2018-10-27" content="An4ZYOGvf6kVHNxqZxS02TPAvpZESkmBhcVCM/byViDDuEB2XKvCF43aCJjrAU/R8H3WDlv+1bDGTL/XxstHGgoAAABTeyJvcmlnaW4iOiJodHRwczovL3RocmVlanMub3JnOjQ0MyIsImZlYXR1cmUiOiJXZWJYUkRldmljZU02OSIsImV4cGlyeSI6MTU0MDY1NTAyMn0=">
 		<!-- Origin Trial Token, feature = WebXR Gamepad Support, origin = https://threejs.org, expires = 2018-10-24 -->
 		<meta http-equiv="origin-trial" data-feature="WebXR Gamepad Support" data-expires="2018-10-24" content="Agrr6lZhlwzv5jmv/mpLZA37DIiVcg3HvX8bH8EWB+OBruV3sUJuzDfYz6qs/je+LcH41DkrmPn4k9RaUaqpQAAAAABYeyJvcmlnaW4iOiJodHRwczovL3RocmVlanMub3JnOjQ0MyIsImZlYXR1cmUiOiJXZWJYUkdhbWVwYWRTdXBwb3J0IiwiZXhwaXJ5IjoxNTQwMzg4NjI0fQ==">
-		<style>
-			body {
-				font-family: Monospace;
-				background-color: #101010;
-				color: #fff;
-				margin: 0px;
-				overflow: hidden;
-			}
-			a {
-				color: #48f;
-			}
-            #blocker {
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				background-color: rgba(0,0,0,0.5);
-			}
-			#instructions {
-				width: 100%;
-				height: 100%;
-				display: -webkit-box;
-				display: -moz-box;
-				display: box;
-				-webkit-box-orient: horizontal;
-				-moz-box-orient: horizontal;
-				box-orient: horizontal;
-				-webkit-box-pack: center;
-				-moz-box-pack: center;
-				box-pack: center;
-				-webkit-box-align: center;
-				-moz-box-align: center;
-				box-align: center;
-				color: #ffffff;
-				text-align: center;
-				cursor: pointer;
-			}
-		</style>
-	</head>
-	<body>
+
+		<link rel="stylesheet" type="text/css" href="css/main.css"/>
 
 		<script src="scripts/lib/jquery-3.3.1.min.js"></script>
 		<script src="scripts/lib/d3.min.js"></script>
 		<script src="scripts/lib/three.min.js"></script>
 		<script src="scripts/lib/WebVR.js"></script>
         <script src="scripts/lib/BoxLineGeometry.js"></script>
-        <script src="scripts/lib/PointerLockControls.js"></script>
+		<script src="scripts/lib/PointerLockControls.js"></script>
+		
+	</head>
+	<body>
         
         <div id="blocker">
 
 			<div id="instructions">
 				<span style="font-size:40px">Click to play</span>
-				<br />
+				<br>
 				(W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
-				<br/><br/><br/><br/><br/><br/>
-				<input id="slider" type="range" min="0" max="18" value="0" oninput="updateTime()">
+
+				<br><br><br>
+
+				<div class="slidecontainer">
+					<p>Time Value: <span id="demo">0</span></p>
+					<input type="range" min="0" max="18" value="0" class="slider" id="slider" oninput="updateTime()">
+				</div>
+
+				<br><br><br>
+
+				<button onclick="resetTime()">Reset</button>
+
 			</div>
 
         </div>
