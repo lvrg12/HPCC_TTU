@@ -116,9 +116,9 @@ function initCamera()
 
 function initPointer()
 {
-    // pointer = new Pointer( "../media/img/circle-dot.png" );
-    // camera.add( pointer );
-    // pointer.position.set(0,0,10);
+    pointer = new Pointer( "media/img/circled-dot.png" );
+    camera.add( pointer );
+    pointer.position.set(0,0,-1);
 }
 
 function initScene()
@@ -210,15 +210,15 @@ function initControl()
 
 function initRoom()
 {
-    geometry = new THREE.BoxGeometry( 100, 40, 220 );
+    var geometry = new THREE.BoxGeometry( 100, 40, 220 );
 
-    textures = ["whiteblockwall","whiteblockwall","whiteceiling","silvermetalmeshfloor","whiteblockwall","whiteblockwall"];
-    repeats = [[15,2],[15,2],[10,25],[10,12],[4,2],[4,2]];
-    materials = [null,null,null,null,null,null];
+    var textures = ["whiteblockwall","whiteblockwall","whiteceiling","silvermetalmeshfloor","whiteblockwall","whiteblockwall"];
+    var repeats = [[15,2],[15,2],[10,25],[10,12],[4,2],[4,2]];
+    var materials = [null,null,null,null,null,null];
 
     for( var i=0; i<6; i++ )
     {
-        texture = new THREE.TextureLoader().load( "media/textures/" + textures[i] + ".jpg" );
+        var texture = new THREE.TextureLoader().load( "media/textures/" + textures[i] + ".jpg" );
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(repeats[i][0],repeats[i][1]);
@@ -226,14 +226,31 @@ function initRoom()
     }
 
     // material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide, envMap: texture } );
-    room = new THREE.Mesh( geometry, materials );
+    var room = new THREE.Mesh( geometry, materials );
     room.geometry.translate( 0, 20, -110 );
     scene.add( room );
 }
 
 function initControlPanel()
 {
-    
+    var triangle = new THREE.Shape();
+    triangle.moveTo(0,0);
+    triangle.lineTo(0,3);
+    triangle.lineTo(7.5,0);
+    triangle.lineTo(0,0);
+
+    var geometry = new THREE.ShapeGeometry( triangle );
+    var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+    var triangle_2d = new THREE.Mesh( geometry, material ) ;
+    scene.add( triangle_2d );
+
+
+
+    var box_geometry = new THREE.BoxGeometry( 7.5, 7.5, 15 );
+    var box_material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+    var box = new THREE.Mesh( box_geometry, box_material );
+    box.position.set( 25, 3.75, -110 );
+    scene.add( box );
 }
 
 function initHPCC()
