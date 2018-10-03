@@ -8,6 +8,7 @@ var hostObj = {};
 var RACK_NUM = 10;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
+var currentTime = 0;
 
 // HPCC
 var hosts = [];
@@ -83,8 +84,8 @@ function init()
     initLight();
     initControl();
     initRoom();
-    initColorRange();
-    Quanah()
+    initControlPanel();
+    Quanah();
     // initHPCC();
     initRenderer();
 
@@ -207,18 +208,6 @@ function initControl()
     raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
 }
 
-function initColorRange()
-{
-    arrTemp = [20, 60, 80, 100];
-    arrColor = ['#44f', '#1a9850','#fee08b', '#d73027'];
-    
-    color_funct = d3.scaleLinear()
-        .domain(arrTemp)
-        .range(arrColor)
-        .interpolate(d3.interpolateHcl);
-
-}
-
 function initRoom()
 {
     geometry = new THREE.BoxGeometry( 100, 40, 220 );
@@ -240,6 +229,11 @@ function initRoom()
     room = new THREE.Mesh( geometry, materials );
     room.geometry.translate( 0, 20, -110 );
     scene.add( room );
+}
+
+function initControlPanel()
+{
+    
 }
 
 function initHPCC()

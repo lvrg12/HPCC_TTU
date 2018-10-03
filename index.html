@@ -32,14 +32,26 @@
 
 				<br><br><br>
 
-				<div class="slidecontainer">
-					<p>Time Value: <span id="demo">0</span></p>
-					<input type="range" min="0" max="18" value="0" class="slider" id="slider" oninput="updateTime()">
+				<div class="dropdown">
+					<select id="services" onchange="updateValues()">
+						<option value="Temperature">Temperature</option>
+						<option value="CPU_load">CPU Load</option>
+						<option value="Memory_usage">Memory Usage</option>
+						<option value="Fans_speed">Fans_Health</option>
+						<option value="Power_consumption">Power Consumption</option>
+					</select>
 				</div>
 
 				<br><br><br>
 
-				<button onclick="resetTime()">Reset</button>
+				<div class="slidecontainer">
+					<p>Time Value: <span id="demo">0</span></p>
+					<input type="range" min="0" max="18" value="0" class="slider" id="slider" oninput="updateValues()">
+				</div>
+
+				<br><br><br>
+
+				<!-- <button onclick="resetTime()">Reset</button> -->
 
 			</div>
 

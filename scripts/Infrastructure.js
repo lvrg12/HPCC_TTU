@@ -10,6 +10,8 @@ function Quanah()
         addRack( rack_num, -40, height/2, -1 * separation*rack_num );
     }
 
+    updateValues();
+
     // add component functions
 
     function addRack( rack_num, x, y, z)
@@ -40,18 +42,13 @@ function Quanah()
     function addHost( rack_num, host_num, key )
     {
         geometry = new THREE.BoxLineGeometry( depth, 1, width/2, 1, 1, 1 );
-        material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
+        material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 0.5 } );
         host = new THREE.LineSegments( geometry, material );
 
         for( var cpu_num=1; cpu_num<=CPU_NUM; cpu_num++ )
         {
-            key2 = "arrTemperatureCPU"+cpu_num;
-            if( json[key][key2] )
-            {
-                temperature = json[key][key2][0];
-                hostObj[rack_num][host_num][cpu_num] = addCPU(cpu_num,temperature);
-                host.add(hostObj[rack_num][host_num][cpu_num]);
-            }
+            hostObj[rack_num][host_num][cpu_num] = addCPU(cpu_num);
+            host.add(hostObj[rack_num][host_num][cpu_num]);
         }
 
 
@@ -74,18 +71,18 @@ function Quanah()
 
     }
 
-    function addCPU( cpu_num, temperature )
+    function addCPU( cpu_num )
     {
         geometry = new THREE.BoxGeometry( depth, 0.5, width/2 );
-        material = new THREE.MeshBasicMaterial( { color: color_funct(temperature) } );
+        material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
         cpu = new THREE.Mesh( geometry, material );
 
         // edges
 
-        edges_geometry = new THREE.EdgesGeometry( cpu.geometry ); 
-        edges_material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } );
-        edges = new THREE.LineSegments( edges_geometry, edges_material );
-        cpu.add( edges );
+        // edges_geometry = new THREE.EdgesGeometry( cpu.geometry ); 
+        // edges_material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } );
+        // edges = new THREE.LineSegments( edges_geometry, edges_material );
+        // cpu.add( edges );
 
         if( cpu_num == 1 )
         {
@@ -99,21 +96,6 @@ function Quanah()
         cpu.position.set( 0, y, 0 );
 
         return cpu;
-    }
-}
-
-function avg_temperature(arr)
-{
-    if( arr.length == 0 )
-        return 0;
-    else
-    {
-        sum = 0;
-        for( var i=0; i<arr.length; i++ )
-        {
-            sum+=arr[i];
-        }
-        return sum/arr.length;
     }
 }
 
