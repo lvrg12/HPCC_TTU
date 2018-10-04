@@ -5,10 +5,11 @@ var pointer;
 var json;
 var color_funct;
 var hostObj = {};
-var RACK_NUM = 1;
+var RACK_NUM = 10;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
 var currentTime = 0;
+var INTERRUPT = false;
 
 // HPCC
 var hosts = [];

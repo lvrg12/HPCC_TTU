@@ -10,6 +10,7 @@ function Quanah()
         addRack( rack_num, -40, height/2, -1 * separation*rack_num );
     }
 
+    reset(false);
     updateValues();
 
     // add component functions
@@ -54,17 +55,16 @@ function Quanah()
 
         if( host_num%2 == 1 )
         {
-            addLabel( "Host " + host_num, "host1", host );
             y = height/2-host_num/2-0.5;
-            z = 0-width/4;
+            z = width/4;
         }
         else
         {
-            addLabel( "Host " + host_num, "host2", host );
             y = height/2-host_num/2;
-            z = width/4;
+            z = 0-width/4;
         }
 
+        // addLabel( "Host " + host_num, "host", host );
         host.position.set( 0, y + 0.5, z );
 
         return host;
@@ -103,13 +103,9 @@ function addLabel( text, type, obj )
     {
         size = 1.5, x = 2.51, y = 16, z = 3;
     }
-    else if( type == "host1" )
+    else if( type == "host" )
     {
-        size = 0.60, x = 2.51, y = -0.5, z = 11;
-    }
-    else if( type == "host2" )
-    {
-        size = 0.60, x = 2.51, y = -0.5, z = -4;
+        size = 0.60, x = 2.51, y = -0.5, z = 3.5;
     }
     else
     {

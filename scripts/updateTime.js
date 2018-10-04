@@ -1,4 +1,4 @@
-function reset()
+function reset( isInterrupt )
 {
     for( var rack=1; rack<=RACK_NUM; rack++ )
         for( var host=1; host<=HOST_NUM; host++ )
@@ -6,12 +6,15 @@ function reset()
                 if( hostObj[rack][host] )
                     hostObj[rack][host][cpu].material.color = new THREE.Color( 0x222222 );
 
+    if( isInterrupt )
+        INTERRUPT = true;
+    else
+        INTERRUPT = false;
+
 }
 
 function updateValues()
 {
-    reset();
-
     var service = document.getElementById("services").value;
     updateColorRange(service);
 
@@ -22,44 +25,49 @@ function updateValues()
     //     for( var host=1; host<=HOST_NUM; host++ )
     //         for( var cpu=1; cpu<=CPU_NUM; cpu++ )
     //             if( hostObj[rack][host] )
-    //                 doTimeout(service,rack,host,cpu,time);
+    //                 updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] );
 
     var rack = 1, host = 1, cpu = 1;
 
     (function loop( rack, host, cpu )
     {
-        setTimeout(function ()
+        if( !INTERRUPT )
         {
-            updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] );
+            setTimeout(function ()
+            {
+                UPDATING = true;
 
-            if( cpu+1 <= CPU_NUM )
-            {
-                loop( rack, host, cpu+1 )
-            }
-            else
-            {
-                if( host+1 <= HOST_NUM )
+                if( hostObj[rack][host] )
+                    updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] );
+
+                if( cpu+1 <= CPU_NUM )
                 {
-                    loop( rack, host+1, 1 );
+                    loop( rack, host, cpu+1 )
                 }
                 else
                 {
-                    if( rack+1 <= RACK_NUM )
+                    if( host+1 <= HOST_NUM )
                     {
-                        loop( rack+1, 1, 1 );
+                        loop( rack, host+1, 1 );
+                    }
+                    else
+                    {
+                        if( rack+1 <= RACK_NUM )
+                        {
+                            loop( rack+1, 1, 1 );
+                        }
                     }
                 }
-            }
 
-        }, 1000);
+            }, 10);
+        }
+        else
+        {
+            reset(false);
+        }
         
       })  ( rack, host, cpu );
 
-}
-
-function doTimeout( service, rack, host, cpu, time )
-{
-    setTimeout( function() { updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] ) } , 3000 );
 }
 
 function updateService( service, keys, obj )
@@ -100,7 +108,7 @@ function updateTemperature( keys, obj )
     if( json[key1][key2][time] !=null )
         var temperature = color_funct(json[key1][key2][time]);
     else
-        var temperature = 0xffffff;
+        var temperature = 0x222222;
 
     obj.material.color = new THREE.Color( temperature );
 
@@ -118,7 +126,7 @@ function updateCPULoad( keys, obj )
     if( json[key1][key2][time] !=null )
         var load = color_funct(json[key1][key2][time]);
     else
-        var load = 0xffffff;
+        var load = 0x222222;
 
     obj.material.color = new THREE.Color( load );
 
@@ -136,7 +144,7 @@ function updateMemoryUsage( keys, obj )
     if( json[key1][key2][time] !=null )
         var usage = color_funct(json[key1][key2][time]);
     else
-        var usage = 0xffffff;
+        var usage = 0x222222;
 
     obj.material.color = new THREE.Color( usage );
 
@@ -155,7 +163,7 @@ function updateFansSpeed( keys, obj )
     if( json[key1][key2][time] !=null )
         var speed = color_funct(json[key1][key2][time]);
     else
-        var speed = 0xffffff;
+        var speed = 0x222222;
 
     obj.material.color = new THREE.Color( speed );
 }
