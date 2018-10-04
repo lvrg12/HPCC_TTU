@@ -84,15 +84,7 @@ function Quanah()
         // edges = new THREE.LineSegments( edges_geometry, edges_material );
         // cpu.add( edges );
 
-        if( cpu_num == 1 )
-        {
-            y = 0.25;
-        }
-        else
-        {
-            y = -0.25;
-        }
-
+        y = ( cpu_num == 1 ) ? 0.25 : -0.25;
         cpu.position.set( 0, y, 0 );
 
         return cpu;

@@ -1,23 +1,65 @@
-function resetTime()
+function reset()
 {
-    console.log("reset " + currentTime);
-    // updateTime(currentTime++);
-}
-
-
-function updateValues()
-{
-    service = document.getElementById("services").value;
-    updateColorRange(service);
-
-    time = parseInt(document.getElementById("slider").value);
-    document.getElementById("demo").innerHTML = time;
-
     for( var rack=1; rack<=RACK_NUM; rack++ )
         for( var host=1; host<=HOST_NUM; host++ )
             for( var cpu=1; cpu<=CPU_NUM; cpu++ )
                 if( hostObj[rack][host] )
-                    updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] );
+                    hostObj[rack][host][cpu].material.color = new THREE.Color( 0x222222 );
+
+}
+
+function updateValues()
+{
+    reset();
+
+    var service = document.getElementById("services").value;
+    updateColorRange(service);
+
+    var time = parseInt(document.getElementById("slider").value);
+    document.getElementById("demo").innerHTML = time;
+
+    // for( var rack=1; rack<=RACK_NUM; rack++ )
+    //     for( var host=1; host<=HOST_NUM; host++ )
+    //         for( var cpu=1; cpu<=CPU_NUM; cpu++ )
+    //             if( hostObj[rack][host] )
+    //                 doTimeout(service,rack,host,cpu,time);
+
+    var rack = 1, host = 1, cpu = 1;
+
+    (function loop( rack, host, cpu )
+    {
+        setTimeout(function ()
+        {
+            updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] );
+
+            if( cpu+1 <= CPU_NUM )
+            {
+                loop( rack, host, cpu+1 )
+            }
+            else
+            {
+                if( host+1 <= HOST_NUM )
+                {
+                    loop( rack, host+1, 1 );
+                }
+                else
+                {
+                    if( rack+1 <= RACK_NUM )
+                    {
+                        loop( rack+1, 1, 1 );
+                    }
+                }
+            }
+
+        }, 1000);
+        
+      })  ( rack, host, cpu );
+
+}
+
+function doTimeout( service, rack, host, cpu, time )
+{
+    setTimeout( function() { updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] ) } , 3000 );
 }
 
 function updateService( service, keys, obj )
@@ -47,18 +89,18 @@ function updateService( service, keys, obj )
 
 function updateTemperature( keys, obj )
 {
-    rack = keys[0];
-    host = keys[1];
-    cpu = keys[2];
-    time = keys[3];
+    var rack = keys[0];
+    var host = keys[1];
+    var cpu = keys[2];
+    var time = keys[3];
 
-    key1 = "compute-"+rack+"-"+host;
-    key2 = "arrTemperatureCPU"+cpu;
+    var key1 = "compute-"+rack+"-"+host;
+    var key2 = "arrTemperatureCPU"+cpu;
 
     if( json[key1][key2][time] !=null )
-        temperature = color_funct(json[key1][key2][time]);
+        var temperature = color_funct(json[key1][key2][time]);
     else
-        temperature = 0xffffff;
+        var temperature = 0xffffff;
 
     obj.material.color = new THREE.Color( temperature );
 
@@ -66,17 +108,17 @@ function updateTemperature( keys, obj )
 
 function updateCPULoad( keys, obj )
 {
-    rack = keys[0];
-    host = keys[1];
-    time = keys[3];
+    var rack = keys[0];
+    var host = keys[1];
+    var time = keys[3];
 
-    key1 = "compute-"+rack+"-"+host;
-    key2 = "arrCPU_load";
+    var key1 = "compute-"+rack+"-"+host;
+    var key2 = "arrCPU_load";
 
     if( json[key1][key2][time] !=null )
-        load = color_funct(json[key1][key2][time]);
+        var load = color_funct(json[key1][key2][time]);
     else
-        load = 0xffffff;
+        var load = 0xffffff;
 
     obj.material.color = new THREE.Color( load );
 
@@ -84,17 +126,17 @@ function updateCPULoad( keys, obj )
 
 function updateMemoryUsage( keys, obj )
 {
-    rack = keys[0];
-    host = keys[1];
-    time = keys[3];
+    var rack = keys[0];
+    var host = keys[1];
+    var time = keys[3];
 
-    key1 = "compute-"+rack+"-"+host;
-    key2 = "arrMemory_usage";
+    var key1 = "compute-"+rack+"-"+host;
+    var key2 = "arrMemory_usage";
 
     if( json[key1][key2][time] !=null )
-        usage = color_funct(json[key1][key2][time]);
+        var usage = color_funct(json[key1][key2][time]);
     else
-        usage = 0xffffff;
+        var usage = 0xffffff;
 
     obj.material.color = new THREE.Color( usage );
 
@@ -102,18 +144,18 @@ function updateMemoryUsage( keys, obj )
 
 function updateFansSpeed( keys, obj )
 {
-    rack = keys[0];
-    host = keys[1];
-    cpu = keys[2];
-    time = keys[3];
+    var rack = keys[0];
+    var host = keys[1];
+    var cpu = keys[2];
+    var time = keys[3];
 
-    key1 = "compute-"+rack+"-"+host;
-    key2 = "arrFans_speed"+cpu;
+    var key1 = "compute-"+rack+"-"+host;
+    var key2 = "arrFans_speed"+cpu;
 
     if( json[key1][key2][time] !=null )
-        speed = color_funct(json[key1][key2][time]);
+        var speed = color_funct(json[key1][key2][time]);
     else
-        speed = 0xffffff;
+        var speed = 0xffffff;
 
     obj.material.color = new THREE.Color( speed );
 }
@@ -125,6 +167,8 @@ function updatePowerConsumption( keys, obj )
 
 function updateColorRange( service )
 {
+    var arrColor, arrDom;
+
     switch( service )
     {
         case "Temperature":

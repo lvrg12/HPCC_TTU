@@ -5,7 +5,7 @@ var pointer;
 var json;
 var color_funct;
 var hostObj = {};
-var RACK_NUM = 10;
+var RACK_NUM = 1;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
 var currentTime = 0;
@@ -239,18 +239,22 @@ function initControlPanel()
     triangle.lineTo(7.5,0);
     triangle.lineTo(0,0);
 
-    var geometry = new THREE.ShapeGeometry( triangle );
-    var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-    var triangle_2d = new THREE.Mesh( geometry, material ) ;
-    scene.add( triangle_2d );
+    // var texture = new THREE.TextureLoader().load( "media/textures/woodstand.jpg" );
 
+    var panel_geometry = new THREE.ExtrudeGeometry( triangle, { depth: 15, bevelEnabled: false } );
+    var panel = new THREE.Mesh( panel_geometry, new THREE.MeshPhongMaterial( { color: 0x303030 } ) );
 
-
+    var box_texture = new THREE.TextureLoader().load( "media/textures/woodstand.jpg" );
+    box_texture.wrapS = THREE.RepeatWrapping;
+    box_texture.wrapT = THREE.RepeatWrapping;
+    box_texture.repeat.set(1,1);
     var box_geometry = new THREE.BoxGeometry( 7.5, 7.5, 15 );
-    var box_material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+    var box_material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: box_texture } );
     var box = new THREE.Mesh( box_geometry, box_material );
-    box.position.set( 25, 3.75, -110 );
-    scene.add( box );
+    box.position.set( 3.75, -3.75, 7.5 );
+    panel.add( box );
+    panel.position.set( 30, 7.5, -110 );
+    scene.add( panel );
 }
 
 function initHPCC()
