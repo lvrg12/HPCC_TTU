@@ -3,7 +3,6 @@ function stopUpdate()
     clearInterval(updateInterval);
 }
 
-
 function reset()
 {
 

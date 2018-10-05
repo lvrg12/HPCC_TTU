@@ -1,5 +1,5 @@
-var container, camera, scene, renderer, effect, clock, controls
-var raycaster
+var container, camera, scene, renderer, effect, clock, controls;
+var raycaster, raycasterObj;
 var cameraPositions;
 var pointer;
 var json;
@@ -10,6 +10,7 @@ var HOST_NUM = 60;
 var CPU_NUM = 2;
 var currentTime = 0;
 var updateInterval;
+var INTERSECTED;
 
 // HPCC
 var hosts = [];
@@ -57,7 +58,7 @@ var selectedService = "Temperature";
 
 
 
-// Controller
+// Controls
 var objects = [];
 var moveForward = false;
 var moveBackward = false;
@@ -90,8 +91,9 @@ function init()
     // initHPCC();
     initRenderer();
 
+    window.addEventListener( 'resize', onResize, false );
+    window.addEventListener( 'mousedown', onMouseDown, false );
     window.requestAnimationFrame( render );
-    window.addEventListener( 'resize', onWindowResize, false );
 
     // request();
 }
@@ -138,6 +140,9 @@ function initLight()
 
 function initControl()
 {
+    raycasterObj = new THREE.Raycaster();
+    mouse = new THREE.Vector2();
+
     controls = new THREE.PointerLockControls( camera );
 
     var blocker = document.getElementById( 'blocker' );
@@ -226,36 +231,61 @@ function initRoom()
         materials[i] = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.BackSide, map: texture } );
     }
 
-    // material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide, envMap: texture } );
     var room = new THREE.Mesh( geometry, materials );
+    room.name = "room";
     room.geometry.translate( 0, 20, -110 );
     scene.add( room );
 }
 
 function initControlPanel()
 {
-    var triangle = new THREE.Shape();
-    triangle.moveTo(0,0);
-    triangle.lineTo(0,3);
-    triangle.lineTo(7.5,0);
-    triangle.lineTo(0,0);
+    // drawing panel
 
-    // var texture = new THREE.TextureLoader().load( "media/textures/woodstand.jpg" );
+    // var triangle = new THREE.Shape();
+    // triangle.moveTo(0,0);
+    // triangle.lineTo(0,3);
+    // triangle.lineTo(7.5,0);
+    // triangle.lineTo(0,0);
 
-    var panel_geometry = new THREE.ExtrudeGeometry( triangle, { depth: 15, bevelEnabled: false } );
-    var panel = new THREE.Mesh( panel_geometry, new THREE.MeshPhongMaterial( { color: 0x303030 } ) );
+    // var panel_geometry = new THREE.ExtrudeGeometry( triangle, { depth: 15, bevelEnabled: false } );
+    // var panel = new THREE.Mesh( panel_geometry, new THREE.MeshPhongMaterial( { color: 0x303030 } ) );
+    // panel.name = "panel";
 
-    var box_texture = new THREE.TextureLoader().load( "media/textures/woodstand.jpg" );
-    box_texture.wrapS = THREE.RepeatWrapping;
-    box_texture.wrapT = THREE.RepeatWrapping;
-    box_texture.repeat.set(1,1);
-    var box_geometry = new THREE.BoxGeometry( 7.5, 7.5, 15 );
-    var box_material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: box_texture } );
-    var box = new THREE.Mesh( box_geometry, box_material );
-    box.position.set( 3.75, -3.75, 7.5 );
-    panel.add( box );
-    panel.position.set( 30, 7.5, -110 );
-    scene.add( panel );
+    // var box_texture = new THREE.TextureLoader().load( "media/textures/woodstand.jpg" );
+    // box_texture.wrapS = THREE.RepeatWrapping;
+    // box_texture.wrapT = THREE.RepeatWrapping;
+    // box_texture.repeat.set(1,1);
+    // var box_geometry = new THREE.BoxGeometry( 7.5, 7.5, 15 );
+    // var box_material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: box_texture } );
+    // var box = new THREE.Mesh( box_geometry, box_material );
+    // box.name = "panel_box";
+    // box.position.set( 3.75, -3.75, 7.5 );
+    // panel.add( box );
+    // panel.position.set( 30, 7.5, -115 );
+    // scene.add( panel );
+
+    // adding service buttons
+
+    var textures = ["whiteblockwall","whiteblockwall","whiteceiling","silvermetalmeshfloor","whiteblockwall","whiteblockwall"];
+    var materials = [0xffffff,0xffff00,0x00ff00,0xff0000,0x0000ff,0xff00ff,0x000000];
+
+    for( var i=0; i<7; i++ )
+    {
+        //var texture = new THREE.TextureLoader().load( "media/textures/" + textures[i] + ".jpg" );
+        materials[i] = new THREE.MeshBasicMaterial( { color: materials[i] } );
+    }
+
+    var button_geometry = new THREE.CubeGeometry( 4, 4, 5  );
+    var button_material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+
+    var buttonTemp = new THREE.Mesh( button_geometry, materials );
+    buttonTemp.position.set( 30, 13, -110 );
+    buttonTemp.name = "button_temperature";
+    scene.add( buttonTemp );
+
+
+
+
 }
 
 function initHPCC()
@@ -338,11 +368,34 @@ function initRenderer()
 
 // Events
 
-function onWindowResize()
+function onResize()
 {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
+}
+
+function onMouseDown( event )
+{
+    event.preventDefault();
+    var rect = renderer.domElement.getBoundingClientRect();
+
+    mouse.x = ( ( event.clientX - rect.left ) / rect.width ) * 2 - 1;
+    mouse.y = - ( ( event.clientY - rect.top ) / rect.height ) * 2 + 1;
+
+    raycasterObj.setFromCamera( mouse, camera );
+
+    var intersects = raycasterObj.intersectObjects( scene.children );
+
+    if ( intersects.length > 0 )
+    {
+        INTERSECTED = intersects[ 0 ].object;
+        console.log(INTERSECTED.name);
+    }
+    else
+    {
+        console.log("nothing here");
+    }
 }
 
 // Animate & Render
@@ -393,5 +446,6 @@ function animate()
 
 function render()
 {
+    // onMouseDown();
     renderer.render( scene, camera );
 }

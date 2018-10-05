@@ -18,9 +18,10 @@ function Quanah()
     {
         hostObj[rack_num] = {};
 
-        geometry = new THREE.BoxLineGeometry( depth, height, width, 1, 1, 2 );
-        material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
-        rack = new THREE.LineSegments( geometry, material );
+        var geometry = new THREE.BoxLineGeometry( depth, height, width, 1, 1, 2 );
+        var material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
+        var rack = new THREE.LineSegments( geometry, material );
+        rack.name = "rack_"+rack_num;
 
         for( var host_num=1; host_num<=HOST_NUM; host_num++ )
         {
@@ -28,7 +29,7 @@ function Quanah()
             if( json[key] )
             {
                 hostObj[rack_num][host_num] = {};
-                rack.add(addHost(rack_num,host_num,key));
+                rack.add(addHost(rack_num,host_num));
             }
         }
 
@@ -39,18 +40,18 @@ function Quanah()
 
     }
 
-    function addHost( rack_num, host_num, key )
+    function addHost( rack_num, host_num )
     {
-        geometry = new THREE.BoxLineGeometry( depth, 1, width/2, 1, 1, 1 );
-        material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 0.5 } );
-        host = new THREE.LineSegments( geometry, material );
+        var geometry = new THREE.BoxLineGeometry( depth, 1, width/2, 1, 1, 1 );
+        var material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 0.5 } );
+        var host = new THREE.LineSegments( geometry, material );
+        host.name = "rack_"+rack_num+"_host_"+host_num;
 
         for( var cpu_num=1; cpu_num<=CPU_NUM; cpu_num++ )
         {
-            hostObj[rack_num][host_num][cpu_num] = addCPU(cpu_num);
+            hostObj[rack_num][host_num][cpu_num] = addCPU(rack_num,host_num,cpu_num);
             host.add(hostObj[rack_num][host_num][cpu_num]);
         }
-
 
         if( host_num%2 == 1 )
         {
@@ -70,11 +71,12 @@ function Quanah()
 
     }
 
-    function addCPU( cpu_num )
+    function addCPU( rack_num, host_num, cpu_num )
     {
-        geometry = new THREE.BoxGeometry( depth, 0.5, width/2 );
-        material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-        cpu = new THREE.Mesh( geometry, material );
+        var geometry = new THREE.BoxGeometry( depth, 0.5, width/2 );
+        var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+        var cpu = new THREE.Mesh( geometry, material );
+        cpu.name = "rack_"+rack_num+"_host_"+host_num+"_cpu_"+cpu_num;
 
         // edges
 
