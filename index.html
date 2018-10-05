@@ -30,10 +30,10 @@
 				<br>
 				(W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
 
-				<br><br><br>
+				<br><br><br><br>
 
 				<div class="dropdown">
-					<select id="services" onchange="updateValues()">
+					<select id="services" onchange="reset()">
 						<option value="Temperature">Temperature</option>
 						<option value="CPU_load">CPU Load</option>
 						<option value="Memory_usage">Memory Usage</option>
@@ -46,12 +46,12 @@
 
 				<div class="slidecontainer">
 					<p>Time Value: <span id="demo">0</span></p>
-					<input type="range" min="0" max="18" value="0" class="slider" id="slider" oninput="updateValues()">
+					<input type="range" min="0" max="18" value="0" class="slider" id="slider" oninput="reset()">
 				</div>
 
 				<br><br><br>
 
-				<button onclick="reset()">Reset</button>
+				<button onclick="stopUpdate()">Stop</button>
 
 			</div>
 

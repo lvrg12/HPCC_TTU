@@ -9,7 +9,7 @@ var RACK_NUM = 10;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
 var currentTime = 0;
-var INTERRUPT = false;
+var updateInterval;
 
 // HPCC
 var hosts = [];

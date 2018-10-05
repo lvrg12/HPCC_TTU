@@ -1,15 +1,24 @@
-function reset( isInterrupt )
+function stopUpdate()
 {
+    clearInterval(updateInterval);
+}
+
+
+function reset()
+{
+
+    // stop previous update service
+    stopUpdate();
+
+    // reset service
     for( var rack=1; rack<=RACK_NUM; rack++ )
         for( var host=1; host<=HOST_NUM; host++ )
             for( var cpu=1; cpu<=CPU_NUM; cpu++ )
                 if( hostObj[rack][host] )
                     hostObj[rack][host][cpu].material.color = new THREE.Color( 0x222222 );
 
-    if( isInterrupt )
-        INTERRUPT = true;
-    else
-        INTERRUPT = false;
+    // update service
+    updateValues();
 
 }
 
@@ -21,53 +30,31 @@ function updateValues()
     var time = parseInt(document.getElementById("slider").value);
     document.getElementById("demo").innerHTML = time;
 
-    // for( var rack=1; rack<=RACK_NUM; rack++ )
-    //     for( var host=1; host<=HOST_NUM; host++ )
-    //         for( var cpu=1; cpu<=CPU_NUM; cpu++ )
-    //             if( hostObj[rack][host] )
-    //                 updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] );
-
     var rack = 1, host = 1, cpu = 1;
-
-    (function loop( rack, host, cpu )
+    updateInterval = setInterval(function ()
     {
-        if( !INTERRUPT )
-        {
-            setTimeout(function ()
+        if( hostObj[rack][host] )
+            updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] );
+
+        if( cpu+1 <= CPU_NUM )
+            cpu++;
+        else
+            if( host+1 <= HOST_NUM )
             {
-                UPDATING = true;
-
-                if( hostObj[rack][host] )
-                    updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] );
-
-                if( cpu+1 <= CPU_NUM )
+                host++;
+                cpu = 1;
+            }
+            else
+                if( rack+1 <= RACK_NUM )
                 {
-                    loop( rack, host, cpu+1 )
+                    rack++;
+                    host = 1;
+                    cpu = 1;
                 }
                 else
-                {
-                    if( host+1 <= HOST_NUM )
-                    {
-                        loop( rack, host+1, 1 );
-                    }
-                    else
-                    {
-                        if( rack+1 <= RACK_NUM )
-                        {
-                            loop( rack+1, 1, 1 );
-                        }
-                    }
-                }
+                    clearInterval(updateInterval);
 
-            }, 10);
-        }
-        else
-        {
-            reset(false);
-        }
-        
-      })  ( rack, host, cpu );
-
+    }, 10);
 }
 
 function updateService( service, keys, obj )

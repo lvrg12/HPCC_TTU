@@ -10,8 +10,7 @@ function Quanah()
         addRack( rack_num, -40, height/2, -1 * separation*rack_num );
     }
 
-    reset(false);
-    updateValues();
+    reset();
 
     // add component functions
 
