@@ -27,7 +27,13 @@ function initControlPanel()
 
     // adding service buttons
 
-    for( var i=0; i<4; i++ )
+    var num = serviceList.length - 1;
+    var r = 4;
+    var group = new THREE.Group();
+    
+    // add center to group
+
+    for( var i=0; i<num; i++ )
     {
         var texture = new THREE.TextureLoader().load( "media/img/" + serviceList[i] + ".png" );
         var geometry = new THREE.PlaneGeometry( 8, 8, 8 );
@@ -35,15 +41,24 @@ function initControlPanel()
         var material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, map: texture } );
         var plane = new THREE.Mesh( geometry, material );
 
+        // var x = r * Math.cos(2 * Math.PI * i / num );
+        // var z = r * Math.sin(2 * Math.PI * i / num );
+
+        plane.position.set( 10 , 10 , 0 );
         plane.rotation.set( 0, Math.PI/2, 0 );
-        plane.position.set( 0 , 10 , i * 10 - 100 );
+
+        // plane.rotateOnWorldAxis( new THREE.Vector3(0,1,0) , 2*Math.PI / num * i );
+        //plane.rotation.set( 0, (2*Math.PI)/8 , 0 );
 
         // plane.rotation.set( 0, Math.PI/4 * i, 0 );
         // plane.position.set( 0 , i * 5, 0  );
 
         plane.name = serviceList[i];
         plane.type = "service_button";
-        scene.add( plane );
+        group.add( plane );
+        group.rotation.set( 0, group.rotation.y + 2*Math.PI, 0);
+
     }
+    scene.add(group);
 
 }
