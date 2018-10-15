@@ -52,7 +52,7 @@ if (isRealtime){
 
 var charType = "Heatmap";
 //***********************
-var serviceList = ["Temperature","CPU_load","Memory_usage","Fans_health","Power_consumption"]
+var serviceList = ["Temperature","CPU_load","Memory_usage","Fans_speed","Power_consumption"]
 var initialService = "Temperature";
 var selectedService = "Temperature";
 
@@ -87,7 +87,7 @@ function init()
     initControl();
     initRoom();
     initControlPanel();
-    Quanah();
+    initQuanah();
     // initHPCC();
     initRenderer();
 
@@ -232,60 +232,10 @@ function initRoom()
     }
 
     var room = new THREE.Mesh( geometry, materials );
-    room.name = "room";
+    room.name = "room_HPCC";
+    room.type = "room";
     room.geometry.translate( 0, 20, -110 );
     scene.add( room );
-}
-
-function initControlPanel()
-{
-    // drawing panel
-
-    // var triangle = new THREE.Shape();
-    // triangle.moveTo(0,0);
-    // triangle.lineTo(0,3);
-    // triangle.lineTo(7.5,0);
-    // triangle.lineTo(0,0);
-
-    // var panel_geometry = new THREE.ExtrudeGeometry( triangle, { depth: 15, bevelEnabled: false } );
-    // var panel = new THREE.Mesh( panel_geometry, new THREE.MeshPhongMaterial( { color: 0x303030 } ) );
-    // panel.name = "panel";
-
-    // var box_texture = new THREE.TextureLoader().load( "media/textures/woodstand.jpg" );
-    // box_texture.wrapS = THREE.RepeatWrapping;
-    // box_texture.wrapT = THREE.RepeatWrapping;
-    // box_texture.repeat.set(1,1);
-    // var box_geometry = new THREE.BoxGeometry( 7.5, 7.5, 15 );
-    // var box_material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: box_texture } );
-    // var box = new THREE.Mesh( box_geometry, box_material );
-    // box.name = "panel_box";
-    // box.position.set( 3.75, -3.75, 7.5 );
-    // panel.add( box );
-    // panel.position.set( 30, 7.5, -115 );
-    // scene.add( panel );
-
-    // adding service buttons
-
-    var textures = ["whiteblockwall","whiteblockwall","whiteceiling","silvermetalmeshfloor","whiteblockwall","whiteblockwall"];
-    var materials = [0xffffff,0xffff00,0x00ff00,0xff0000,0x0000ff,0xff00ff,0x000000];
-
-    for( var i=0; i<7; i++ )
-    {
-        //var texture = new THREE.TextureLoader().load( "media/textures/" + textures[i] + ".jpg" );
-        materials[i] = new THREE.MeshBasicMaterial( { color: materials[i] } );
-    }
-
-    var button_geometry = new THREE.CubeGeometry( 4, 4, 5  );
-    var button_material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-
-    var buttonTemp = new THREE.Mesh( button_geometry, materials );
-    buttonTemp.position.set( 30, 13, -110 );
-    buttonTemp.name = "button_temperature";
-    scene.add( buttonTemp );
-
-
-
-
 }
 
 function initHPCC()
@@ -380,9 +330,6 @@ function onMouseDown( event )
     event.preventDefault();
     var rect = renderer.domElement.getBoundingClientRect();
 
-    mouse.x = ( ( event.clientX - rect.left ) / rect.width ) * 2 - 1;
-    mouse.y = - ( ( event.clientY - rect.top ) / rect.height ) * 2 + 1;
-
     raycasterObj.setFromCamera( mouse, camera );
 
     var intersects = raycasterObj.intersectObjects( scene.children );
@@ -390,6 +337,12 @@ function onMouseDown( event )
     if ( intersects.length > 0 )
     {
         INTERSECTED = intersects[ 0 ].object;
+
+        if( INTERSECTED.type == "service_button" )
+        {
+            selectedService = INTERSECTED.name;
+            reset();
+        }
         console.log(INTERSECTED.name);
     }
     else

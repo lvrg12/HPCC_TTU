@@ -23,7 +23,7 @@ function reset()
 
 function updateValues()
 {
-    var service = document.getElementById("services").value;
+    var service = selectedService;
     updateColorRange(service);
 
     var time = parseInt(document.getElementById("slider").value);

@@ -1,4 +1,4 @@
-function Quanah()
+function initQuanah()
 {
     height = HOST_NUM/2;
     depth = 5;
@@ -22,6 +22,7 @@ function Quanah()
         var material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
         var rack = new THREE.LineSegments( geometry, material );
         rack.name = "rack_"+rack_num;
+        rack.type = "rack";
 
         for( var host_num=1; host_num<=HOST_NUM; host_num++ )
         {
@@ -46,6 +47,7 @@ function Quanah()
         var material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 0.5 } );
         var host = new THREE.LineSegments( geometry, material );
         host.name = "rack_"+rack_num+"_host_"+host_num;
+        host.type = "host";
 
         for( var cpu_num=1; cpu_num<=CPU_NUM; cpu_num++ )
         {
@@ -77,6 +79,7 @@ function Quanah()
         var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
         var cpu = new THREE.Mesh( geometry, material );
         cpu.name = "rack_"+rack_num+"_host_"+host_num+"_cpu_"+cpu_num;
+        cpu.type = "cpu";
 
         // edges
 
@@ -126,6 +129,10 @@ function addLabel( text, type, obj )
         var textMesh = new THREE.Mesh( geometry, material_text );
         textMesh.position.set( x, y, z );
         textMesh.rotation.y = Math.PI/2;
+
+        textMesh.name = "label_"+text;
+        textMesh.type = "label";
+
         obj.add( textMesh );
     } );
 
