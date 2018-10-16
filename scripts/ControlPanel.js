@@ -16,10 +16,11 @@ function initControlPanel()
         var material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, map: texture } );
         var plane = new THREE.Mesh( geometry, material );
 
+        addServiceOutline( plane, serviceList[i] );
+        addServiceLabel( plane, serviceList[i] );
+
         plane.name = serviceList[i];
         plane.type = "service_button";
-
-        addServiceLabel( plane, i );
 
         plane.rotation.set( 0, i*2*Math.PI/num, 0 );
         plane.translateZ(r);
@@ -44,7 +45,7 @@ function initControlPanel()
 
         loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font ) {
 
-            var geometry = new THREE.TextGeometry( serviceList[service], {
+            var geometry = new THREE.TextGeometry( service, {
                 font: font,
                 size: s/15,
                 height: 0,
@@ -56,7 +57,7 @@ function initControlPanel()
             var x = ( service == 4 ) ? -s/2 + 0.5 : -s/2 + 1;
             textMesh.position.set( x, 0, 0.05 );
 
-            textMesh.name = "service_label_"+serviceList[service];
+            textMesh.name = "service_label_"+service;
             textMesh.type = "service_label";
 
             banner.add( textMesh );
@@ -64,7 +65,23 @@ function initControlPanel()
 
         banner.position.set( 0, s - s/3 , 0 );
 
+        addServiceOutline( banner, service );
+
         obj.add( banner );
+
+    }
+
+    function addServiceOutline( obj, service )
+    {
+
+        var outline_material = new THREE.MeshBasicMaterial( { color: 0x00ff00, side: THREE.DoubleSide } );
+        var outline = new THREE.Mesh( obj.geometry, outline_material );
+        outline.position = obj.position;
+        outline.translateZ(-0.05);
+        outline.scale.multiplyScalar(1.05);
+        outline.type = "outline";
+        outline.visible = ( service == selectedService ) ? true : false;
+        obj.add( outline );
 
     }
 
@@ -73,4 +90,34 @@ function initControlPanel()
 function rotateControlPanel()
 {
     control_panel.rotation.y -= CP_SPEED;
+}
+
+function updateServiceOutline( obj )
+{
+    var services = obj.parent.children;
+    var children;
+
+    // unhighlight non selected services
+    for( var s=0; s<services.length; s++ )
+    {
+        children = services[s].children;
+        for( var c=0; c<children.length; c++ )
+            if( children[c].type == "outline" )
+                children[c].visible = false;
+            else
+                for( var cc=0; cc<children[c].children.length; cc++ )
+                    if( children[c].children[cc].type == "outline" )
+                        children[c].children[cc].visible = false;
+    }
+
+    // highligh selected service
+    children = obj.children;
+    for( var c=0; c<children.length; c++ )
+        if( children[c].type == "outline" )
+            children[c].visible = true;
+        else
+            for( var cc=0; cc<children[c].children.length; cc++ )
+                if( children[c].children[cc].type == "outline" )
+                    children[c].children[cc].visible = true;
+
 }

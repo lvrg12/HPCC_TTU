@@ -341,6 +341,7 @@ function onMouseDown( event )
     {
         INTERSECTED = intersects[ 0 ].object;
         selectedService = INTERSECTED.name;
+        updateServiceOutline(INTERSECTED);
         reset();
         console.log(INTERSECTED.name);
     }
