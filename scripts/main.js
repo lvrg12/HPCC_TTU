@@ -13,7 +13,8 @@ var updateInterval;
 var INTERSECTED;
 
 var CP_SPEED = 0.01;
-var control_panel;
+var service_control_panel;
+var time_control_panel;
 
 // HPCC
 var hosts = [];
@@ -335,7 +336,7 @@ function onMouseDown( event )
 
     raycasterObj.setFromCamera( mouse, camera );
 
-    var intersects = raycasterObj.intersectObjects( control_panel.children );
+    var intersects = raycasterObj.intersectObjects( service_control_panel.children );
 
     if ( intersects.length > 0 )  // control panel was clicked
     {
@@ -352,11 +353,11 @@ function onMouseDown( event )
         if ( intersects.length > 0 )
         {
             INTERSECTED = intersects[ 0 ].object;
-            console.log(INTERSECTED.name);
+            // console.log(INTERSECTED.name);
         }
         else
         {
-            console.log("nothing here");
+            // console.log("nothing here");
         }
     }
 }
@@ -404,7 +405,7 @@ function animate()
 {
     requestAnimationFrame( animate );
     animateControls();
-    rotateControlPanel();
+    rotateServiceControlPanel();
     render();
 }
 

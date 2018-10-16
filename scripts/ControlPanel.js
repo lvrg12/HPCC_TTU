@@ -1,13 +1,20 @@
 function initControlPanel()
 {
+    initServiceControlPanel();
+    initTimeControlPanel();
+}
+
+// service control panel init
+function initServiceControlPanel()
+{
     var num = serviceList.length ;
     var s = 5
     var r = s/(2*Math.tan(Math.PI/num)) + s/15;
 
-    control_panel = new THREE.Group();
+    service_control_panel = new THREE.Group();
 
-    control_panel.type = "control_panel";
-    control_panel.name = "service_control_panel";
+    service_control_panel.type = "control_panel";
+    service_control_panel.name = "service_control_panel";
 
     for( var i=0; i<num; i++ )
     {
@@ -19,17 +26,17 @@ function initControlPanel()
         addServiceOutline( plane, serviceList[i] );
         addServiceLabel( plane, serviceList[i] );
 
-        plane.name = serviceList[i];
         plane.type = "service_button";
+        plane.name = serviceList[i];
 
         plane.rotation.set( 0, i*2*Math.PI/num, 0 );
         plane.translateZ(r);
 
-        control_panel.add( plane );
+        service_control_panel.add( plane );
     }
 
-    control_panel.position.set( -10, 15, -180 );
-    scene.add( control_panel );
+    service_control_panel.position.set( -10, 15, -180 );
+    scene.add( service_control_panel );
 
 
     // functions
@@ -41,11 +48,10 @@ function initControlPanel()
         var banner = new THREE.Mesh( banner_geometry, banner_material );
 
         var loader = new THREE.FontLoader();
-        var material_text = new THREE.MeshPhongMaterial( { color: 0xffffff } );
-
-        loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font ) {
-
-            var geometry = new THREE.TextGeometry( service, {
+        var text_material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+        loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font )
+        {
+            var text_geometry = new THREE.TextGeometry( service, {
                 font: font,
                 size: s/15,
                 height: 0,
@@ -53,20 +59,19 @@ function initControlPanel()
                 bevelEnabled: false
             } );
 
-            var textMesh = new THREE.Mesh( geometry, material_text );
-            var x = ( service == 4 ) ? -s/2 + 0.5 : -s/2 + 1;
-            textMesh.position.set( x, 0, 0.05 );
+            var text = new THREE.Mesh( text_geometry, text_material );
+            var x = ( service == serviceList[4] ) ? -s/2 + 0.5 : -s/2 + 1;
+            text.position.set( x, 0, 0.05 );
 
-            textMesh.name = "service_label_"+service;
-            textMesh.type = "service_label";
+            text.name = "service_label_"+service;
+            text.type = "service_label";
 
-            banner.add( textMesh );
+            banner.add( text );
         } );
 
+
         banner.position.set( 0, s - s/3 , 0 );
-
         addServiceOutline( banner, service );
-
         obj.add( banner );
 
     }
@@ -87,9 +92,45 @@ function initControlPanel()
 
 }
 
-function rotateControlPanel()
+// time control panel init
+function initTimeControlPanel()
 {
-    control_panel.rotation.y -= CP_SPEED;
+    time_control_panel = new THREE.Group();
+
+    var n = 15;
+    var r = 10;
+
+    for( var t=0; t<n; t++ )
+    {
+        var x1 = r * Math.cos(2 * Math.PI * t / n);
+        var y1 = r * Math.sin(2 * Math.PI * t / n);
+
+        var x2 = r * Math.cos(2 * Math.PI * (t+1) / n);
+        var y2 = r * Math.sin(2 * Math.PI * (t+1) / n);
+
+        var triangle = new THREE.Shape();
+        triangle.moveTo(0,0);
+        triangle.lineTo(x1,y1);
+        triangle.lineTo(x2,y2);
+        triangle.lineTo(0,0);
+
+        var pie_geometry = new THREE.ExtrudeGeometry( triangle, { depth: r/10, bevelEnabled: false } );
+        var pie_material = new THREE.MeshBasicMaterial( { color: 0x333333 } );
+        var pie = new THREE.Mesh( pie_geometry, pie_material );
+        pie.type = "pie";
+        pie.name = "pie_" + t;
+
+        time_control_panel.add( pie );
+
+    }
+
+    scene.add(time_control_panel);
+
+}
+
+function rotateServiceControlPanel()
+{
+    service_control_panel.rotation.y -= CP_SPEED;
 }
 
 function updateServiceOutline( obj )

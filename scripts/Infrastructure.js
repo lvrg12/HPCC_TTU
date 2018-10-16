@@ -99,7 +99,7 @@ function initQuanah()
     {
         var loader = new THREE.FontLoader();
 
-        var material_text = new THREE.MeshPhongMaterial( { color: 0x000000 } );
+        var material_text = new THREE.MeshBasicMaterial( { color: 0x000000 } );
 
         var size, x, y, z;
 
