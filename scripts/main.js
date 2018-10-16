@@ -12,6 +12,9 @@ var currentTime = 0;
 var updateInterval;
 var INTERSECTED;
 
+var CP_SPEED = 0.01;
+var control_panel;
+
 // HPCC
 var hosts = [];
 var hostResults = {};
@@ -332,22 +335,28 @@ function onMouseDown( event )
 
     raycasterObj.setFromCamera( mouse, camera );
 
-    var intersects = raycasterObj.intersectObjects( scene.children );
+    var intersects = raycasterObj.intersectObjects( control_panel.children );
 
-    if ( intersects.length > 0 )
+    if ( intersects.length > 0 )  // control panel was clicked
     {
         INTERSECTED = intersects[ 0 ].object;
-
-        if( INTERSECTED.type == "service_button" )
-        {
-            selectedService = INTERSECTED.name;
-            reset();
-        }
+        selectedService = INTERSECTED.name;
+        reset();
         console.log(INTERSECTED.name);
     }
-    else
+    else  // something in the scene was clicked
     {
-        console.log("nothing here");
+        intersects = raycasterObj.intersectObjects( scene.children );
+
+        if ( intersects.length > 0 )
+        {
+            INTERSECTED = intersects[ 0 ].object;
+            console.log(INTERSECTED.name);
+        }
+        else
+        {
+            console.log("nothing here");
+        }
     }
 }
 
@@ -394,6 +403,7 @@ function animate()
 {
     requestAnimationFrame( animate );
     animateControls();
+    rotateControlPanel();
     render();
 }
 

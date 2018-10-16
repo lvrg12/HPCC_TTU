@@ -1,64 +1,76 @@
 function initControlPanel()
 {
-    // drawing panel
+    var num = serviceList.length ;
+    var s = 5
+    var r = s/(2*Math.tan(Math.PI/num)) + s/15;
 
-    // var triangle = new THREE.Shape();
-    // triangle.moveTo(0,0);
-    // triangle.lineTo(0,3);
-    // triangle.lineTo(7.5,0);
-    // triangle.lineTo(0,0);
+    control_panel = new THREE.Group();
 
-    // var panel_geometry = new THREE.ExtrudeGeometry( triangle, { depth: 15, bevelEnabled: false } );
-    // var panel = new THREE.Mesh( panel_geometry, new THREE.MeshPhongMaterial( { color: 0x303030 } ) );
-    // panel.name = "panel";
-
-    // var box_texture = new THREE.TextureLoader().load( "media/textures/woodstand.jpg" );
-    // box_texture.wrapS = THREE.RepeatWrapping;
-    // box_texture.wrapT = THREE.RepeatWrapping;
-    // box_texture.repeat.set(1,1);
-    // var box_geometry = new THREE.BoxGeometry( 7.5, 7.5, 15 );
-    // var box_material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: box_texture } );
-    // var box = new THREE.Mesh( box_geometry, box_material );
-    // box.name = "panel_box";
-    // box.position.set( 3.75, -3.75, 7.5 );
-    // panel.add( box );
-    // panel.position.set( 30, 7.5, -115 );
-    // scene.add( panel );
-
-    // adding service buttons
-
-    var num = serviceList.length - 1;
-    var r = 4;
-    var group = new THREE.Group();
-    
-    // add center to group
+    control_panel.type = "control_panel";
+    control_panel.name = "service_control_panel";
 
     for( var i=0; i<num; i++ )
     {
         var texture = new THREE.TextureLoader().load( "media/img/" + serviceList[i] + ".png" );
-        var geometry = new THREE.PlaneGeometry( 8, 8, 8 );
-        //var material = new THREE.MeshBasicMaterial( { map: textures[i] } );
+        var geometry = new THREE.PlaneGeometry( s, s, s );
         var material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, map: texture } );
         var plane = new THREE.Mesh( geometry, material );
 
-        // var x = r * Math.cos(2 * Math.PI * i / num );
-        // var z = r * Math.sin(2 * Math.PI * i / num );
-
-        plane.position.set( 10 , 10 , 0 );
-        plane.rotation.set( 0, Math.PI/2, 0 );
-
-        // plane.rotateOnWorldAxis( new THREE.Vector3(0,1,0) , 2*Math.PI / num * i );
-        //plane.rotation.set( 0, (2*Math.PI)/8 , 0 );
-
-        // plane.rotation.set( 0, Math.PI/4 * i, 0 );
-        // plane.position.set( 0 , i * 5, 0  );
-
         plane.name = serviceList[i];
         plane.type = "service_button";
-        group.add( plane );
-        group.rotation.set( 0, group.rotation.y + 2*Math.PI, 0);
+
+        addServiceLabel( plane, i );
+
+        plane.rotation.set( 0, i*2*Math.PI/num, 0 );
+        plane.translateZ(r);
+
+        control_panel.add( plane );
+    }
+
+    control_panel.position.set( -10, 15, -180 );
+    scene.add( control_panel );
+
+
+    // functions
+
+    function addServiceLabel( obj, service )
+    {
+        var banner_geometry = new THREE.PlaneGeometry( s, s/4, s );
+        var banner_material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, color: 0x000000 } );
+        var banner = new THREE.Mesh( banner_geometry, banner_material );
+
+        var loader = new THREE.FontLoader();
+        var material_text = new THREE.MeshPhongMaterial( { color: 0xffffff } );
+
+        loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+            var geometry = new THREE.TextGeometry( serviceList[service], {
+                font: font,
+                size: s/15,
+                height: 0,
+                curveSegments: 12,
+                bevelEnabled: false
+            } );
+
+            var textMesh = new THREE.Mesh( geometry, material_text );
+            var x = ( service == 4 ) ? -s/2 + 0.5 : -s/2 + 1;
+            textMesh.position.set( x, 0, 0.05 );
+
+            textMesh.name = "service_label_"+serviceList[service];
+            textMesh.type = "service_label";
+
+            banner.add( textMesh );
+        } );
+
+        banner.position.set( 0, s - s/3 , 0 );
+
+        obj.add( banner );
 
     }
-    scene.add(group);
 
+}
+
+function rotateControlPanel()
+{
+    control_panel.rotation.y -= CP_SPEED;
 }

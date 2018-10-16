@@ -12,7 +12,8 @@ function initQuanah()
 
     reset();
 
-    // add component functions
+
+    // functions
 
     function addRack( rack_num, x, y, z)
     {
@@ -34,7 +35,7 @@ function initQuanah()
             }
         }
 
-        addLabel( "Rack " + rack_num, "rack", rack );
+        addQuanahLabel( "Rack " + rack_num, "rack", rack );
 
         rack.position.set( x, y + 0.1, z );
         scene.add( rack );
@@ -66,7 +67,7 @@ function initQuanah()
             z = 0-width/4;
         }
 
-        // addLabel( "Host " + host_num, "host", host );
+        // addQuanahLabel( "Host " + host_num, "host", host );
         host.position.set( 0, y + 0.5, z );
 
         return host;
@@ -93,47 +94,47 @@ function initQuanah()
 
         return cpu;
     }
-}
 
-function addLabel( text, type, obj )
-{
-    var loader = new THREE.FontLoader();
-
-    material_text = new THREE.MeshPhongMaterial( { color: 0x000000 } );
-
-    var size, x, y, z;
-
-    if( type == "rack" )
+    function addQuanahLabel( text, type, obj )
     {
-        size = 1.5, x = 2.51, y = 16, z = 3;
-    }
-    else if( type == "host" )
-    {
-        size = 0.60, x = 2.51, y = -0.5, z = 3.5;
-    }
-    else
-    {
-        size = 0.5, x = 2.51, y = 20, z = -6;
-    }
+        var loader = new THREE.FontLoader();
 
-    loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font ) {
+        var material_text = new THREE.MeshPhongMaterial( { color: 0x000000 } );
 
-        var geometry = new THREE.TextGeometry( text, {
-            font: font,
-            size: size,
-            height: 0,
-            curveSegments: 12,
-            bevelEnabled: false
+        var size, x, y, z;
+
+        if( type == "rack" )
+        {
+            size = 1.5, x = 2.51, y = 16, z = 3;
+        }
+        else if( type == "host" )
+        {
+            size = 0.60, x = 2.51, y = -0.5, z = 3.5;
+        }
+        else
+        {
+            size = 0.5, x = 2.51, y = 20, z = -6;
+        }
+
+        loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+            var geometry = new THREE.TextGeometry( text, {
+                font: font,
+                size: size,
+                height: 0,
+                curveSegments: 12,
+                bevelEnabled: false
+            } );
+
+            var textMesh = new THREE.Mesh( geometry, material_text );
+            textMesh.position.set( x, y, z );
+            textMesh.rotation.y = Math.PI/2;
+
+            textMesh.name = "quanah_label_"+text;
+            textMesh.type = "quanah_label";
+
+            obj.add( textMesh );
         } );
 
-        var textMesh = new THREE.Mesh( geometry, material_text );
-        textMesh.position.set( x, y, z );
-        textMesh.rotation.y = Math.PI/2;
-
-        textMesh.name = "label_"+text;
-        textMesh.type = "label";
-
-        obj.add( textMesh );
-    } );
-
+    }
 }
