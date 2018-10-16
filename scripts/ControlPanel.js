@@ -115,16 +115,58 @@ function initTimeControlPanel()
         triangle.lineTo(0,0);
 
         var pie_geometry = new THREE.ExtrudeGeometry( triangle, { depth: r/10, bevelEnabled: false } );
-        var pie_material = new THREE.MeshBasicMaterial( { color: 0x333333 } );
+        var pie_material = new THREE.MeshBasicMaterial( { color: 0xcccccc } );
         var pie = new THREE.Mesh( pie_geometry, pie_material );
+
         pie.type = "pie";
         pie.name = "pie_" + t;
+
+        addTimeWire( pie );
+        addTimeLabel( pie, t );
 
         time_control_panel.add( pie );
 
     }
 
+    time_control_panel.position.set( 30, r + r/4, -200 );
     scene.add(time_control_panel);
+
+    // functions
+
+    function addTimeWire( obj )
+    {
+        var wire_geometry = new THREE.EdgesGeometry( obj.geometry );
+        var wire_material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } )
+        var wire = new THREE.LineSegments( wire_geometry, wire_material );
+        obj.add( wire );
+    }
+
+    function addTimeLabel( obj, timestamp )
+    {
+        var loader = new THREE.FontLoader();
+        var text_material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+        loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font )
+        {
+            var text_geometry = new THREE.TextGeometry( timestamp, {
+                font: font,
+                size: 10,
+                height: 0,
+                curveSegments: 12,
+                bevelEnabled: false
+            } );
+
+            var text = new THREE.Mesh( text_geometry, text_material );
+            text.position.set( 0, 0, 0 );
+
+            text.name = "time_label_"+timestamp;
+            text.type = "time_label";
+
+            scene.add( text );
+
+            // obj.add( text );
+        } );
+
+    }
 
 }
 
