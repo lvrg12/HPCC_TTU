@@ -97,36 +97,36 @@ function initTimeControlPanel()
 {
     time_control_panel = new THREE.Group();
 
-    var n = 15;
+    var n = 20;
     var r = 10;
 
-    for( var t=0; t<n; t++ )
+    var triangle = new THREE.Shape();
+    triangle.moveTo(0,0);
+    triangle.lineTo( r * Math.cos(0) , r * Math.sin(0) );
+    triangle.lineTo( r * Math.cos(2 * Math.PI / n) , r * Math.sin(2 * Math.PI / n) );
+    triangle.lineTo(0,0);
+
+    var extrudeSettings = { depth: r/60, bevelEnabled: false };
+    var pie_geometry = new THREE.ExtrudeGeometry( triangle, extrudeSettings );
+    var pie_material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+
+    for( var t=1; t<=n; t++ )
     {
-        var x1 = r * Math.cos(2 * Math.PI * t / n);
-        var y1 = r * Math.sin(2 * Math.PI * t / n);
+        var pie = new THREE.Mesh( pie_geometry.clone(), pie_material.clone() );
 
-        var x2 = r * Math.cos(2 * Math.PI * (t+1) / n);
-        var y2 = r * Math.sin(2 * Math.PI * (t+1) / n);
-
-        var triangle = new THREE.Shape();
-        triangle.moveTo(0,0);
-        triangle.lineTo(x1,y1);
-        triangle.lineTo(x2,y2);
-        triangle.lineTo(0,0);
-
-        var pie_geometry = new THREE.ExtrudeGeometry( triangle, { depth: r/10, bevelEnabled: false } );
-        var pie_material = new THREE.MeshBasicMaterial( { color: 0xcccccc } );
-        var pie = new THREE.Mesh( pie_geometry, pie_material );
+        pie.rotateZ( Math.PI / 2 - ( 2*Math.PI/n / 2 * t ) - 2*Math.PI/n / 2 * (t-1) );
 
         pie.type = "pie";
         pie.name = "pie_" + t;
 
         addTimeWire( pie );
-        addTimeLabel( pie, t );
+        addTimeLabel( pie, t + "" );
 
         time_control_panel.add( pie );
-
     }
+
+    addCover();
+    addButton();
 
     time_control_panel.position.set( 30, r + r/4, -200 );
     scene.add(time_control_panel);
@@ -149,22 +149,65 @@ function initTimeControlPanel()
         {
             var text_geometry = new THREE.TextGeometry( timestamp, {
                 font: font,
-                size: 10,
+                size: r/8,
                 height: 0,
                 curveSegments: 12,
                 bevelEnabled: false
             } );
 
             var text = new THREE.Mesh( text_geometry, text_material );
-            text.position.set( 0, 0, 0 );
+            var y = ( timestamp.length == 1 ) ? r/5.75 : r/4.5 ;
+            text.position.set( r * 0.8, y, extrudeSettings.depth + 0.025 );
+            text.rotateZ( -Math.PI/2 + 2*Math.PI/n / 2 );
 
             text.name = "time_label_"+timestamp;
             text.type = "time_label";
 
-            scene.add( text );
-
-            // obj.add( text );
+            obj.add( text );
         } );
+
+    }
+
+    function addCover()
+    {
+        var geometry = new THREE.CylinderGeometry( r*0.75, r*0.75, extrudeSettings.depth, 32 );
+        var material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+        var cover = new THREE.Mesh( geometry, material );
+        cover.translateZ( extrudeSettings.depth * 2 );
+        cover.rotateX( Math.PI / 2 );
+        addTimeWire( cover );
+        time_control_panel.add( cover );
+    }
+
+    function addButton()
+    {
+        var geometry = new THREE.CylinderGeometry( r*0.3, r*0.3, extrudeSettings.depth / 2, 32 );
+        var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+        var button = new THREE.Mesh( geometry, material );
+        button.translateZ( extrudeSettings.depth * 2.5 );
+        button.rotateX( Math.PI / 2 );
+        addTimeWire( button );
+
+        var loader = new THREE.FontLoader();
+        var text_material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+        loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font )
+        {
+            var text_geometry = new THREE.TextGeometry( "REAL\nTIME", {
+                font: font,
+                size: r/8,
+                height: 0,
+                curveSegments: 12,
+                bevelEnabled: false
+            } );
+
+            var text = new THREE.Mesh( text_geometry, text_material );
+            text.position.set( -2, extrudeSettings.depth , -0.25 );
+            text.rotateX( -Math.PI/2 );
+
+            button.add( text );
+        } );
+
+        time_control_panel.add( button );
 
     }
 
