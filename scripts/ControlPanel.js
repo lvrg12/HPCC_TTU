@@ -225,8 +225,10 @@ function rotateServiceControlPanel()
     service_control_panel.rotation.y -= CP_SPEED;
 }
 
-function updateServiceOutline( obj )
+function updateSelectedService( obj )
 {
+    selectedService = INTERSECTED.name;
+
     var services = obj.parent.children;
     var children;
 
@@ -255,21 +257,27 @@ function updateServiceOutline( obj )
 
 }
 
-function updateTimestamp( obj )
+function updateSelectedTimestamp( obj )
 {
-    var depth = 10/60;
+    if( obj.type == "timestamp" )
+        selectedTimestamp = parseInt(INTERSECTED.name);
 
+    var depth = 10/60;
     var timestamps = obj.parent.children;
 
     for( var c=0; c<timestamps.length; c++ )
     {
-        if( timestamps[c].type == "timestamp" )
+        if( timestamps[c].type != "timestamp_cover" )
         {
-            timestamps[c].position.z = 0;
             timestamps[c].material.color.setHex( 0xffffff );
+            if( timestamps[c].type != "REALTIME" )
+                timestamps[c].position.z = 0;
         }
     }
 
     obj.material.color.setHex( 0x00ff00 );
-    obj.translateZ( depth * 1.75 );
+
+    if( obj.type == "timestamp" )
+        obj.translateZ( depth * 1.75 );
+
 }

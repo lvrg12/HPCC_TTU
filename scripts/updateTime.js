@@ -1,6 +1,15 @@
 function stopUpdate()
 {
-    clearInterval(updateInterval);
+    clearInterval(updateHost);
+}
+
+function resetService()
+{
+    for( var rack=1; rack<=RACK_NUM; rack++ )
+        for( var host=1; host<=HOST_NUM; host++ )
+            for( var cpu=1; cpu<=CPU_NUM; cpu++ )
+                if( hostObj[rack][host] )
+                    hostObj[rack][host][cpu].material.color = new THREE.Color( 0x222222 );
 }
 
 function reset()
@@ -10,27 +19,29 @@ function reset()
     stopUpdate();
 
     // reset service
-    for( var rack=1; rack<=RACK_NUM; rack++ )
-        for( var host=1; host<=HOST_NUM; host++ )
-            for( var cpu=1; cpu<=CPU_NUM; cpu++ )
-                if( hostObj[rack][host] )
-                    hostObj[rack][host][cpu].material.color = new THREE.Color( 0x222222 );
+    resetService();
 
     // update service
-    updateValues();
+    updateValues( selectedTimestamp - 1 );
 
 }
 
-function updateValues()
+function updateValues( time )
 {
+    console.log(time);
+
     var service = selectedService;
     updateColorRange(service);
 
-    var time = currentTimestamp - 1;
-
     var rack = 1, host = 1, cpu = 1;
-    updateInterval = setInterval(function ()
+    updateHost = setInterval(function ()
     {
+        if( time == 20 )
+        {
+            stopUpdate()
+            isInit = false;
+        }
+
         if( hostObj[rack][host] )
             updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] );
 
@@ -50,9 +61,16 @@ function updateValues()
                     cpu = 1;
                 }
                 else
-                    clearInterval(updateInterval);
+                {
+                    stopUpdate();
+                    if( isInit )
+                    {
+                        resetService();
+                        updateValues( time + 1 );
+                    }
+                }
 
-    }, 10);
+    }, 1 );
 }
 
 function updateService( service, keys, obj )

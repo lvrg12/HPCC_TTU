@@ -8,9 +8,12 @@ var hostObj = {};
 var RACK_NUM = 10;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
-var currentTimestamp = 1;
-var updateInterval;
+var selectedTimestamp = 1;
 var INTERSECTED;
+var isInit = true;
+
+var updateHost;
+var updateTimestamp;
 
 var CP_SPEED = 0.01;
 var service_control_panel;
@@ -340,9 +343,10 @@ function onMouseDown( event )
 
     if ( intersects.length > 0 )  // service control panel was clicked
     {
+        isInit = false;
+
         INTERSECTED = intersects[ 0 ].object;
-        selectedService = INTERSECTED.name;
-        updateServiceOutline(INTERSECTED);
+        updateSelectedService(INTERSECTED);
         reset();
         console.log(INTERSECTED.name);
     }
@@ -352,20 +356,21 @@ function onMouseDown( event )
 
         if ( intersects.length > 0 )  // time control panel was clicked
         {
+
             INTERSECTED = intersects[ 0 ].object;
 
             if( INTERSECTED.type == "timestamp" ) // change timestamp
             {
-                currentTimestamp = parseInt(INTERSECTED.name);
-                updateTimestamp(INTERSECTED);
+                isInit = false;
+                updateSelectedTimestamp(INTERSECTED);
                 reset();
                 console.log(INTERSECTED.name);
             }
 
             if( INTERSECTED.type == "REALTIME" ) // change time to REALTIME
             {
-                // currentTimestamp = parseInt(INTERSECTED.name);
-                // updateTimestamp(INTERSECTED);
+                isInit = false;
+                updateSelectedTimestamp(INTERSECTED);
                 // reset();
                 console.log(INTERSECTED.name);
             }
