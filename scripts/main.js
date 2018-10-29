@@ -8,7 +8,7 @@ var hostObj = {};
 var RACK_NUM = 10;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
-var currentTime = 0;
+var currentTimestamp = 1;
 var updateInterval;
 var INTERSECTED;
 
@@ -338,7 +338,7 @@ function onMouseDown( event )
 
     var intersects = raycasterObj.intersectObjects( service_control_panel.children );
 
-    if ( intersects.length > 0 )  // control panel was clicked
+    if ( intersects.length > 0 )  // service control panel was clicked
     {
         INTERSECTED = intersects[ 0 ].object;
         selectedService = INTERSECTED.name;
@@ -346,18 +346,45 @@ function onMouseDown( event )
         reset();
         console.log(INTERSECTED.name);
     }
-    else  // something in the scene was clicked
+    else
     {
-        intersects = raycasterObj.intersectObjects( scene.children );
+        intersects = raycasterObj.intersectObjects( time_control_panel.children );
 
-        if ( intersects.length > 0 )
+        if ( intersects.length > 0 )  // time control panel was clicked
         {
             INTERSECTED = intersects[ 0 ].object;
-            // console.log(INTERSECTED.name);
+
+            if( INTERSECTED.type == "timestamp" ) // change timestamp
+            {
+                currentTimestamp = parseInt(INTERSECTED.name);
+                updateTimestamp(INTERSECTED);
+                reset();
+                console.log(INTERSECTED.name);
+            }
+
+            if( INTERSECTED.type == "REALTIME" ) // change time to REALTIME
+            {
+                // currentTimestamp = parseInt(INTERSECTED.name);
+                // updateTimestamp(INTERSECTED);
+                // reset();
+                console.log(INTERSECTED.name);
+            }
+
         }
         else
         {
-            // console.log("nothing here");
+
+            intersects = raycasterObj.intersectObjects( scene.children );
+
+            if ( intersects.length > 0 ) // something else was clicked
+            {
+                INTERSECTED = intersects[ 0 ].object;
+                // console.log(INTERSECTED.name);
+            }
+            else
+            {
+                console.log("nothing here");
+            }
         }
     }
 }

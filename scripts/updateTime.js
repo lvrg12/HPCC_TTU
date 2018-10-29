@@ -26,8 +26,7 @@ function updateValues()
     var service = selectedService;
     updateColorRange(service);
 
-    var time = parseInt(document.getElementById("slider").value);
-    document.getElementById("demo").innerHTML = time;
+    var time = currentTimestamp - 1;
 
     var rack = 1, host = 1, cpu = 1;
     updateInterval = setInterval(function ()

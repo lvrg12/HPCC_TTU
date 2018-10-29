@@ -116,8 +116,8 @@ function initTimeControlPanel()
 
         pie.rotateZ( Math.PI / 2 - ( 2*Math.PI/n / 2 * t ) - 2*Math.PI/n / 2 * (t-1) );
 
-        pie.type = "pie";
-        pie.name = "pie_" + t;
+        pie.type = "timestamp";
+        pie.name = t + "";
 
         addTimeWire( pie );
         addTimeLabel( pie, t + "" );
@@ -173,6 +173,10 @@ function initTimeControlPanel()
         var geometry = new THREE.CylinderGeometry( r*0.75, r*0.75, extrudeSettings.depth, 32 );
         var material = new THREE.MeshBasicMaterial( { color: 0x000000 } );
         var cover = new THREE.Mesh( geometry, material );
+
+        cover.type = "timestamp_cover";
+        cover.name = "timestamp_cover";
+
         cover.translateZ( extrudeSettings.depth * 2 );
         cover.rotateX( Math.PI / 2 );
         addTimeWire( cover );
@@ -181,7 +185,7 @@ function initTimeControlPanel()
 
     function addButton()
     {
-        var geometry = new THREE.CylinderGeometry( r*0.3, r*0.3, extrudeSettings.depth / 2, 32 );
+        var geometry = new THREE.CylinderGeometry( r*0.3, r*0.3, extrudeSettings.depth, 32 );
         var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
         var button = new THREE.Mesh( geometry, material );
         button.translateZ( extrudeSettings.depth * 2.5 );
@@ -201,11 +205,14 @@ function initTimeControlPanel()
             } );
 
             var text = new THREE.Mesh( text_geometry, text_material );
-            text.position.set( -2, extrudeSettings.depth , -0.25 );
+            text.position.set( -2, extrudeSettings.depth + 0.025 , -0.25 );
             text.rotateX( -Math.PI/2 );
 
             button.add( text );
         } );
+
+        button.type = "REALTIME";
+        button.name = "REALTIME";
 
         time_control_panel.add( button );
 
@@ -246,4 +253,23 @@ function updateServiceOutline( obj )
                 if( children[c].children[cc].type == "outline" )
                     children[c].children[cc].visible = true;
 
+}
+
+function updateTimestamp( obj )
+{
+    var depth = 10/60;
+
+    var timestamps = obj.parent.children;
+
+    for( var c=0; c<timestamps.length; c++ )
+    {
+        if( timestamps[c].type == "timestamp" )
+        {
+            timestamps[c].position.z = 0;
+            timestamps[c].material.color.setHex( 0xffffff );
+        }
+    }
+
+    obj.material.color.setHex( 0x00ff00 );
+    obj.translateZ( depth * 1.75 );
 }
