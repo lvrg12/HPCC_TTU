@@ -123,12 +123,14 @@ function initTimeControlPanel()
         addTimeLabel( pie, t + "" );
 
         time_control_panel.add( pie );
+        timeObj[pie.name] = pie;
     }
 
     addCover();
     addButton();
 
-    time_control_panel.position.set( 30, r + r/4, -200 );
+    time_control_panel.position.set( -10, r + r/4, -5 );
+    time_control_panel.rotation.y = Math.PI;
     scene.add(time_control_panel);
 
     // functions
@@ -215,16 +217,13 @@ function initTimeControlPanel()
         button.name = "REALTIME";
 
         time_control_panel.add( button );
+        timeObj[button.name] = button;
 
     }
 
 }
 
-function rotateServiceControlPanel()
-{
-    service_control_panel.rotation.y -= CP_SPEED;
-}
-
+// update service control panel colors
 function updateSelectedService( obj )
 {
     selectedService = INTERSECTED.name;
@@ -257,10 +256,11 @@ function updateSelectedService( obj )
 
 }
 
-function updateSelectedTimestamp( obj )
+// update time control panel colors
+function updateSelectedTimestamp( name )
 {
-    if( obj.type == "timestamp" )
-        selectedTimestamp = parseInt(INTERSECTED.name);
+
+    var obj = timeObj[name];
 
     var depth = 10/60;
     var timestamps = obj.parent.children;
@@ -280,4 +280,12 @@ function updateSelectedTimestamp( obj )
     if( obj.type == "timestamp" )
         obj.translateZ( depth * 1.75 );
 
+}
+
+// update control panel movement
+function updateControlPanel()
+{
+    service_control_panel.rotation.y -= CP_SPEED;
+    time_control_panel.rotation.z += CP_SPEED/4;
+    timeObj["REALTIME"].rotation.y -= CP_SPEED/4;
 }

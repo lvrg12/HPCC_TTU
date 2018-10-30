@@ -22,13 +22,15 @@ function reset()
     resetService();
 
     // update service
-    updateValues( selectedTimestamp - 1 );
+    updateValues( selectedTimestamp );
 
 }
 
-function updateValues( time )
+function updateValues( timestamp )
 {
-    console.log(time);
+    updateSelectedTimestamp( timestamp+"" );
+
+    time = timestamp - 1;
 
     var service = selectedService;
     updateColorRange(service);
@@ -36,11 +38,6 @@ function updateValues( time )
     var rack = 1, host = 1, cpu = 1;
     updateHost = setInterval(function ()
     {
-        if( time == 20 )
-        {
-            stopUpdate()
-            isInit = false;
-        }
 
         if( hostObj[rack][host] )
             updateService( service, [rack,host,cpu,time], hostObj[rack][host][cpu] );
@@ -65,8 +62,13 @@ function updateValues( time )
                     stopUpdate();
                     if( isInit )
                     {
+                        timestamp++;
+                        updateSelectedTimestamp( timestamp+"" );
                         resetService();
-                        updateValues( time + 1 );
+                        updateValues( timestamp );
+
+                        if( time == 19 )
+                            isInit = false;
                     }
                 }
 

@@ -5,6 +5,7 @@ var pointer;
 var json;
 var color_funct;
 var hostObj = {};
+var timeObj = {};
 var RACK_NUM = 10;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
@@ -362,7 +363,7 @@ function onMouseDown( event )
             if( INTERSECTED.type == "timestamp" ) // change timestamp
             {
                 isInit = false;
-                updateSelectedTimestamp(INTERSECTED);
+                selectedTimestamp = parseInt(INTERSECTED.name);
                 reset();
                 console.log(INTERSECTED.name);
             }
@@ -370,7 +371,6 @@ function onMouseDown( event )
             if( INTERSECTED.type == "REALTIME" ) // change time to REALTIME
             {
                 isInit = false;
-                updateSelectedTimestamp(INTERSECTED);
                 // reset();
                 console.log(INTERSECTED.name);
             }
@@ -437,7 +437,7 @@ function animate()
 {
     requestAnimationFrame( animate );
     animateControls();
-    rotateServiceControlPanel();
+    updateControlPanel();
     render();
 }
 
