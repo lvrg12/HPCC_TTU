@@ -88,16 +88,19 @@ function init()
     document.body.appendChild( container );
 
     loadJSON();
+    initScene();
     initCamera();
     initPointer();
-    initScene();
     initLight();
-    initControl();
+
+    initControlVR();
+    //initControlPC();
+
     initRoom();
     initControlPanel();
     initQuanah();
     // initHPCC();
-    initRenderer();
+    // initRenderer();
 
     window.addEventListener( 'resize', onResize, false );
     window.addEventListener( 'mousedown', onMouseDown, false );
@@ -146,7 +149,26 @@ function initLight()
     scene.add( light );
 }
 
-function initControl()
+function initControlVR()
+{
+    raycaster = new THREE.Raycaster();
+    mouse = new THREE.Vector2();
+
+    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    container.appendChild( renderer.domElement );
+
+    controls = new THREE.DeviceOrientationControls( camera, true );
+    controls.connect();         
+
+    effect = new THREE.StereoEffect( renderer );
+    effect.setSize( window.innerWidth, window.innerHeight );
+
+    window.addEventListener( 'deviceorientation', setOrientationControls, true );
+}
+
+function initControlPC()
 {
     raycasterObj = new THREE.Raycaster();
     mouse = new THREE.Vector2();
@@ -396,7 +418,13 @@ function onMouseDown( event )
 
 // Animate & Render
 
-function animateControls()
+function setOrientationControls(e)
+{
+    if (!e.alpha)
+      return;
+}
+
+function animateDeskControls()
 {
     if ( controls.isLocked === true )
     {
@@ -433,10 +461,17 @@ function animateControls()
     }
 }
 
+function animateVRControls()
+{
+    renderer.setAnimationLoop( render );
+    controls.update();
+}
+
 function animate()
 {
     requestAnimationFrame( animate );
-    animateControls();
+    //animateDeskControls();
+    animateVRControls();
     updateControlPanel();
     render();
 }
@@ -444,5 +479,5 @@ function animate()
 function render()
 {
     // onMouseDown();
-    renderer.render( scene, camera );
+    effect.render( scene, camera );
 }
