@@ -93,14 +93,14 @@ function init()
     initPointer();
     initLight();
 
-    initControlVR();
-    //initControlPC();
+    //initControlVR();
+    initControlDesk();
 
     initRoom();
     initControlPanel();
     initQuanah();
     // initHPCC();
-    // initRenderer();
+    initRenderer();
 
     window.addEventListener( 'resize', onResize, false );
     window.addEventListener( 'mousedown', onMouseDown, false );
@@ -140,6 +140,8 @@ function initScene()
     scene = new THREE.Scene();
     scene.background = new THREE.Color( 0x505050 );
     scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+
+    // scene = document.querySelector('a-scene').object3D;
 }
 
 function initLight()
@@ -168,7 +170,7 @@ function initControlVR()
     window.addEventListener( 'deviceorientation', setOrientationControls, true );
 }
 
-function initControlPC()
+function initControlDesk()
 {
     raycasterObj = new THREE.Raycaster();
     mouse = new THREE.Vector2();
@@ -182,10 +184,10 @@ function initControlPC()
         controls.lock();
     }, false );
 
-    controls.addEventListener( 'lock', function() {
-        instructions.style.display = 'none';
-        blocker.style.display = 'none';
-    } );
+    // controls.addEventListener( 'lock', function() {
+    //     instructions.style.display = 'none';
+    //     blocker.style.display = 'none';
+    // } );
 
     controls.addEventListener( 'unlock', function() {
         blocker.style.display = 'block';
@@ -470,14 +472,17 @@ function animateVRControls()
 function animate()
 {
     requestAnimationFrame( animate );
-    //animateDeskControls();
-    animateVRControls();
+    animateDeskControls();
+    // animateVRControls();
     updateControlPanel();
     render();
 }
 
 function render()
 {
-    // onMouseDown();
-    effect.render( scene, camera );
+    // DESK
+    renderer.render( scene, camera );
+
+    // VR
+    // effect.render( scene, camera );
 }
