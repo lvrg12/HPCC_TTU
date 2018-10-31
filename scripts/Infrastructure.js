@@ -3,11 +3,12 @@ function initQuanah()
     height = HOST_NUM/2;
     depth = 5;
     width = 15;
+
     separation = width + width*0.3;
 
     for( var rack_num=1; rack_num<=RACK_NUM; rack_num++ )
     {
-        addRack( rack_num, -40, height/2, -1 * separation*rack_num );
+        addRack( rack_num, 0, height/2, -1 * separation*rack_num );
     }
 
     reset();

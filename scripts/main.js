@@ -6,7 +6,8 @@ var json;
 var color_funct;
 var hostObj = {};
 var timeObj = {};
-var RACK_NUM = 10;
+var ROOM_SIZE = 1;
+var RACK_NUM = 1;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
 var selectedTimestamp = 1;
@@ -90,20 +91,20 @@ function init()
     loadJSON();
     initScene();
     initCamera();
-    initPointer();
+    // initPointer();
     initLight();
 
     //initControlVR();
     initControlDesk();
 
     initRoom();
-    initControlPanel();
+    // initControlPanel();
     initQuanah();
     // initHPCC();
     initRenderer();
 
     window.addEventListener( 'resize', onResize, false );
-    window.addEventListener( 'mousedown', onMouseDown, false );
+    // window.addEventListener( 'mousedown', onMouseDown, false );
     window.requestAnimationFrame( render );
 
     // request();
@@ -124,8 +125,8 @@ function loadJSON()
 
 function initCamera()
 {
-    camera = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, 0.1, 250 );
-    camera.position.set( 20, 7.5, -5 );
+    camera = new THREE.PerspectiveCamera( 1, window.innerWidth / window.innerHeight, 1, 1 );
+    camera.position.set( 0, 0, 0 );
 }
 
 function initPointer()
@@ -137,11 +138,11 @@ function initPointer()
 
 function initScene()
 {
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0x505050 );
-    scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+    // scene = new THREE.Scene();
+    // scene.background = new THREE.Color( 0x505050 );
+    // scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
 
-    // scene = document.querySelector('a-scene').object3D;
+    scene = document.querySelector('a-scene').object3D;
 }
 
 function initLight()
@@ -248,10 +249,20 @@ function initControlDesk()
 
 function initRoom()
 {
-    var geometry = new THREE.BoxGeometry( 100, 40, 220 );
+    var height = ROOM_SIZE;
+    var width = ROOM_SIZE * 4;
+    var depth = ROOM_SIZE * 2;
+    var geometry = new THREE.BoxGeometry( width, height, depth );
 
     var textures = ["whiteblockwall","whiteblockwall","whiteceiling","silvermetalmeshfloor","whiteblockwall","whiteblockwall"];
-    var repeats = [[15,2],[15,2],[10,25],[10,12],[4,2],[4,2]];
+    
+    var repeats = [ [width,height],
+                    [width,height],
+                    [width*2,width],
+                    [width*2,width],
+                    [width*2,height],
+                    [width*2,height]];
+
     var materials = [null,null,null,null,null,null];
 
     for( var i=0; i<6; i++ )
@@ -266,7 +277,7 @@ function initRoom()
     var room = new THREE.Mesh( geometry, materials );
     room.name = "room_HPCC";
     room.type = "room";
-    room.geometry.translate( 0, 20, -110 );
+    room.translateY( ROOM_SIZE*1.5 );
     scene.add( room );
 }
 
@@ -474,7 +485,7 @@ function animate()
     requestAnimationFrame( animate );
     animateDeskControls();
     // animateVRControls();
-    updateControlPanel();
+    // updateControlPanel();
     render();
 }
 
