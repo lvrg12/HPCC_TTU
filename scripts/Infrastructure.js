@@ -1,8 +1,8 @@
 function initQuanah()
 {
-    height = HOST_NUM/2;
-    depth = 5;
-    width = 15;
+    height = 10;
+    depth = 1;
+    width = 5;
 
     separation = width + width*0.3;
 
