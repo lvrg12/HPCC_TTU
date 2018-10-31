@@ -184,10 +184,10 @@ function initControlDesk()
         controls.lock();
     }, false );
 
-    // controls.addEventListener( 'lock', function() {
-    //     instructions.style.display = 'none';
-    //     blocker.style.display = 'none';
-    // } );
+    controls.addEventListener( 'lock', function() {
+        instructions.style.display = 'none';
+        blocker.style.display = 'none';
+    } );
 
     controls.addEventListener( 'unlock', function() {
         blocker.style.display = 'block';
