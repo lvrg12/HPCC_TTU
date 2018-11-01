@@ -110,7 +110,7 @@ function init()
     initRenderer();
 
     window.addEventListener( 'resize', onResize, false );
-    // window.addEventListener( 'mousedown', onMouseDown, false );
+    window.addEventListener( 'mousedown', onMouseDown, false );
     window.requestAnimationFrame( render );
 
     // request();
