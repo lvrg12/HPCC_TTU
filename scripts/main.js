@@ -7,7 +7,8 @@ var color_funct;
 var hostObj = {};
 var timeObj = {};
 var ROOM_SIZE = 1;
-var RACK_NUM = 1;
+var ELEVATION = ROOM_SIZE * 1.5;
+var RACK_NUM = 10;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
 var selectedTimestamp = 1;
@@ -18,6 +19,8 @@ var updateHost;
 var updateTimestamp;
 
 var CP_SPEED = 0.01;
+
+var quanah;
 var service_control_panel;
 var time_control_panel;
 
@@ -126,7 +129,9 @@ function loadJSON()
 function initCamera()
 {
     camera = new THREE.PerspectiveCamera( 1, window.innerWidth / window.innerHeight, 1, 1 );
-    camera.position.set( 0, 0, 0 );
+    camera.position.set( 0, -1, 0 );
+    camera.name = "hppc_camera";
+    // scene.add(camera);
 }
 
 function initPointer()
@@ -138,10 +143,6 @@ function initPointer()
 
 function initScene()
 {
-    // scene = new THREE.Scene();
-    // scene.background = new THREE.Color( 0x505050 );
-    // scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
-
     scene = document.querySelector('a-scene').object3D;
 }
 
@@ -149,6 +150,7 @@ function initLight()
 {
     var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
     light.position.set( 0.5, 1, 0.75 );
+    light.name = "hppc_light";
     scene.add( light );
 }
 
@@ -250,7 +252,7 @@ function initControlDesk()
 function initRoom()
 {
     var height = ROOM_SIZE;
-    var width = ROOM_SIZE * 4;
+    var width = ROOM_SIZE * 7;
     var depth = ROOM_SIZE * 2;
     var geometry = new THREE.BoxGeometry( width, height, depth );
 
@@ -277,7 +279,7 @@ function initRoom()
     var room = new THREE.Mesh( geometry, materials );
     room.name = "room_HPCC";
     room.type = "room";
-    room.translateY( ROOM_SIZE*1.5 );
+    room.translateY( ELEVATION );
     scene.add( room );
 }
 
