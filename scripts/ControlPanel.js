@@ -36,7 +36,6 @@ function initServiceControlPanel()
     }
 
     service_control_panel.position.set( ROOM_SIZE * 2.5, 0, 0 );
-    service_control_panel.translateY( ELEVATION );
     scene.add( service_control_panel );
 
 
@@ -99,6 +98,9 @@ function initTimeControlPanel()
 {
     time_control_panel = new THREE.Group();
 
+    service_control_panel.type = "control_panel";
+    service_control_panel.name = "time_control_panel";
+
     var r = ROOM_SIZE * 0.25;
     var n = TS_NUM;
 
@@ -133,7 +135,6 @@ function initTimeControlPanel()
 
     time_control_panel.position.set( ROOM_SIZE * -3, 0, 0 );
     time_control_panel.rotation.y = Math.PI/2;
-    time_control_panel.translateY( ELEVATION );
     scene.add(time_control_panel);
 
     // functions

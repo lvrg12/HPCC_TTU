@@ -8,7 +8,6 @@ var hostObj = {};
 var timeObj = {};
 
 var ROOM_SIZE = 1;
-var ELEVATION = ROOM_SIZE * 1.5;
 
 var RACK_NUM = 10;
 var HOST_NUM = 60;
@@ -103,15 +102,16 @@ function init()
 
     initControl();
 
+    console.log(scene);
+
     initRoom();
     initControlPanel();
     initQuanah();
     // initHPCC();
-    initRenderer();
+    // initRenderer();
 
     window.addEventListener( 'resize', onResize, false );
     window.addEventListener( 'mousedown', onMouseDown, false );
-    window.requestAnimationFrame( render );
 
     // request();
 }
@@ -132,9 +132,10 @@ function loadJSON()
 function initCamera()
 {
     camera = new THREE.PerspectiveCamera( 1, window.innerWidth / window.innerHeight, 1, 1 );
-    camera.position.set( 0, -1, 0 );
-    camera.name = "hppc_camera";
-    // scene.add(camera);
+    document.querySelector('a-camera').object3D.name = "hppc_camera_group";
+    // camera = document.querySelector('a-camera').object3D.children[0];
+    camera.name = "hpcc_camera";
+    camera.position.set( 0, 0, 0 );
 }
 
 function initPointer()
@@ -151,10 +152,9 @@ function initScene()
 
 function initLight()
 {
-    var light = new THREE.HemisphereLight( 0xeeeeff, 0x777788, 0.75 );
-    light.position.set( 0.5, 1, 0.75 );
-    light.name = "hppc_light";
-    scene.add( light );
+    document.querySelector('a-light').object3D.name = "hpcc_light_group";
+    light = document.querySelector('a-light').object3D.children[0];
+    light.name = "hpcc_light";
 }
 
 function initControl()
@@ -263,7 +263,6 @@ function initRoom()
     var room = new THREE.Mesh( geometry, materials );
     room.name = "room_HPCC";
     room.type = "room";
-    room.translateY( ELEVATION );
     scene.add( room );
 }
 
@@ -357,7 +356,6 @@ function onResize()
 function onMouseDown( event )
 {
     event.preventDefault();
-    var rect = renderer.domElement.getBoundingClientRect();
 
     raycasterObj.setFromCamera( mouse, camera );
 
@@ -417,11 +415,6 @@ function onMouseDown( event )
 
 // Animate & Render
 
-function setOrientationControls(e)
-{
-    if (!e.alpha)
-      return;
-}
 
 function animateControls()
 {
@@ -464,11 +457,11 @@ function animate()
 {
     requestAnimationFrame( animate );
     animateControls();
-    updateControlPanel();
-    render();
+    // updateControlPanel();
+    // render();
 }
 
-function render()
-{
-    renderer.render( scene, camera );
-}
+// function render()
+// {
+//     renderer.render( scene, camera );
+// }

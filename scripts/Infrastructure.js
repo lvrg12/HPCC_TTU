@@ -7,7 +7,7 @@ function initQuanah()
 
     for( var rack_num=1; rack_num<=RACK_NUM; rack_num++ )
     {
-        addRack( rack_num, -1*separation*RACK_NUM/2 + separation*rack_num - ROOM_SIZE/2, 0, ROOM_SIZE * -0.8 );
+        addRack( rack_num, -1*separation*RACK_NUM/2 + separation*rack_num - ROOM_SIZE/2, -height/8, ROOM_SIZE * -0.8 );
     }
 
     reset();
@@ -36,9 +36,7 @@ function initQuanah()
         addQuanahLabel( "Rack " + rack_num, "rack", rack );
 
         rack.position.set( x, y, z );
-        rack.translateY( ELEVATION - height/60 * 12  );
         scene.add( rack );
-
     }
 
     function addHost( rack_num, host_num )
