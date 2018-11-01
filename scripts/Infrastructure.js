@@ -102,15 +102,15 @@ function initQuanah()
 
         if( type == "rack" )
         {
-            size = 1.5, x = 2.51, y = 16, z = 3;
+            size = height/16, x = 0, y = height/1.75, z = 0;
         }
         else if( type == "host" )
         {
-            size = 0.60, x = 2.51, y = -0.5, z = 3.5;
+            size = height/10, x = 2.51, y = -0.5, z = 3.5;
         }
         else
         {
-            size = 0.5, x = 2.51, y = 20, z = -6;
+            size = height/10, x = 2.51, y = 20, z = -6;
         }
 
         loader.load( 'media/fonts/helvetiker_regular.typeface.json', function ( font ) {
@@ -125,7 +125,7 @@ function initQuanah()
 
             var textMesh = new THREE.Mesh( geometry, material_text );
             textMesh.position.set( x, y, z );
-            textMesh.rotation.y = Math.PI/2;
+            // textMesh.rotation.y = Math.PI/-2;
 
             textMesh.name = "quanah_label_"+text;
             textMesh.type = "quanah_label";

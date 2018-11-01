@@ -101,8 +101,7 @@ function init()
     // initPointer();
     initLight();
 
-    //initControlVR();
-    initControlDesk();
+    initControl();
 
     initRoom();
     initControlPanel();
@@ -158,26 +157,7 @@ function initLight()
     scene.add( light );
 }
 
-function initControlVR()
-{
-    raycaster = new THREE.Raycaster();
-    mouse = new THREE.Vector2();
-
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    container.appendChild( renderer.domElement );
-
-    controls = new THREE.DeviceOrientationControls( camera, true );
-    controls.connect();         
-
-    effect = new THREE.StereoEffect( renderer );
-    effect.setSize( window.innerWidth, window.innerHeight );
-
-    window.addEventListener( 'deviceorientation', setOrientationControls, true );
-}
-
-function initControlDesk()
+function initControl()
 {
     raycasterObj = new THREE.Raycaster();
     mouse = new THREE.Vector2();
@@ -443,7 +423,7 @@ function setOrientationControls(e)
       return;
 }
 
-function animateDeskControls()
+function animateControls()
 {
     if ( controls.isLocked === true )
     {
@@ -480,26 +460,15 @@ function animateDeskControls()
     }
 }
 
-function animateVRControls()
-{
-    renderer.setAnimationLoop( render );
-    controls.update();
-}
-
 function animate()
 {
     requestAnimationFrame( animate );
-    animateDeskControls();
-    // animateVRControls();
-    // updateControlPanel();
+    animateControls();
+    updateControlPanel();
     render();
 }
 
 function render()
 {
-    // DESK
     renderer.render( scene, camera );
-
-    // VR
-    // effect.render( scene, camera );
 }
