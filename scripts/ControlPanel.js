@@ -8,7 +8,7 @@ function initControlPanel()
 function initServiceControlPanel()
 {
     var num = serviceList.length ;
-    var s = 5
+    var s = ROOM_SIZE * 0.25
     var r = s/(2*Math.tan(Math.PI/num)) + s/15;
 
     service_control_panel = new THREE.Group();
@@ -35,7 +35,8 @@ function initServiceControlPanel()
         service_control_panel.add( plane );
     }
 
-    service_control_panel.position.set( -10, 15, -180 );
+    service_control_panel.position.set( ROOM_SIZE * 2.5, 0, 0 );
+    service_control_panel.translateY( ELEVATION );
     scene.add( service_control_panel );
 
 
@@ -60,8 +61,8 @@ function initServiceControlPanel()
             } );
 
             var text = new THREE.Mesh( text_geometry, text_material );
-            var x = ( service == serviceList[4] ) ? -s/2 + 0.5 : -s/2 + 1;
-            text.position.set( x, 0, 0.05 );
+            var x = ( service == serviceList[4] ) ? -s/2.5 : -s/4;
+            text.position.set( x, 0, 0.005 );
 
             text.name = "service_label_"+service;
             text.type = "service_label";
@@ -82,8 +83,9 @@ function initServiceControlPanel()
         var outline_material = new THREE.MeshBasicMaterial( { color: 0x00ff00, side: THREE.DoubleSide } );
         var outline = new THREE.Mesh( obj.geometry, outline_material );
         outline.position = obj.position;
-        outline.translateZ(-0.05);
-        outline.scale.multiplyScalar(1.05);
+        outline.translateZ(-0.005);
+        outline.translateY(0.005);
+        outline.scale.multiplyScalar(1.1);
         outline.type = "outline";
         outline.visible = ( service == selectedService ) ? true : false;
         obj.add( outline );
