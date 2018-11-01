@@ -97,8 +97,8 @@ function initTimeControlPanel()
 {
     time_control_panel = new THREE.Group();
 
-    var n = 20;
-    var r = 10;
+    var r = ROOM_SIZE * 0.25;
+    var n = TS_NUM;
 
     var triangle = new THREE.Shape();
     triangle.moveTo(0,0);
@@ -119,7 +119,7 @@ function initTimeControlPanel()
         pie.type = "timestamp";
         pie.name = t + "";
 
-        addTimeWire( pie );
+        // addTimeWire( pie );
         addTimeLabel( pie, t + "" );
 
         time_control_panel.add( pie );
@@ -129,8 +129,9 @@ function initTimeControlPanel()
     addCover();
     addButton();
 
-    time_control_panel.position.set( -10, r + r/4, -5 );
-    time_control_panel.rotation.y = Math.PI;
+    time_control_panel.position.set( ROOM_SIZE * -3, 0, 0 );
+    time_control_panel.rotation.y = Math.PI/2;
+    time_control_panel.translateY( ELEVATION );
     scene.add(time_control_panel);
 
     // functions
@@ -140,6 +141,8 @@ function initTimeControlPanel()
         var wire_geometry = new THREE.EdgesGeometry( obj.geometry );
         var wire_material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } )
         var wire = new THREE.LineSegments( wire_geometry, wire_material );
+        wire.translateZ(1);
+        wire.rotateX(Math.PI/2);
         obj.add( wire );
     }
 
@@ -159,7 +162,7 @@ function initTimeControlPanel()
 
             var text = new THREE.Mesh( text_geometry, text_material );
             var y = ( timestamp.length == 1 ) ? r/5.75 : r/4.5 ;
-            text.position.set( r * 0.8, y, extrudeSettings.depth + 0.025 );
+            text.position.set( r * 0.8, y, extrudeSettings.depth + 0.005 );
             text.rotateZ( -Math.PI/2 + 2*Math.PI/n / 2 );
 
             text.name = "time_label_"+timestamp;
@@ -190,7 +193,7 @@ function initTimeControlPanel()
         var geometry = new THREE.CylinderGeometry( r*0.3, r*0.3, extrudeSettings.depth, 32 );
         var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
         var button = new THREE.Mesh( geometry, material );
-        button.translateZ( extrudeSettings.depth * 2.5 );
+        button.translateZ( extrudeSettings.depth * 5 );
         button.rotateX( Math.PI / 2 );
         addTimeWire( button );
 
@@ -207,7 +210,7 @@ function initTimeControlPanel()
             } );
 
             var text = new THREE.Mesh( text_geometry, text_material );
-            text.position.set( -2, extrudeSettings.depth + 0.025 , -0.25 );
+            text.position.set( r/-5.5 , extrudeSettings.depth, r/-24 );
             text.rotateX( -Math.PI/2 );
 
             button.add( text );
@@ -262,7 +265,7 @@ function updateSelectedTimestamp( name )
 
     var obj = timeObj[name];
 
-    var depth = 10/60;
+    var ts_depth = 10/60;
     var timestamps = obj.parent.children;
 
     for( var c=0; c<timestamps.length; c++ )
@@ -278,7 +281,7 @@ function updateSelectedTimestamp( name )
     obj.material.color.setHex( 0x00ff00 );
 
     if( obj.type == "timestamp" )
-        obj.translateZ( depth * 1.75 );
+        obj.translateZ( ts_depth * 0.1 );
 
 }
 

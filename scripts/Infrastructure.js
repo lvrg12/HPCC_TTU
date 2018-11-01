@@ -1,17 +1,16 @@
 function initQuanah()
 {
-    height = ROOM_SIZE*0.7;
+    height = ROOM_SIZE*0.75;
     depth = ROOM_SIZE*0.1;
-    width = ROOM_SIZE*0.5;
+    width = ROOM_SIZE*0.4;
     separation = width + width*0.3;
 
     for( var rack_num=1; rack_num<=RACK_NUM; rack_num++ )
     {
         addRack( rack_num, -1*separation*RACK_NUM/2 + separation*rack_num - ROOM_SIZE/2, 0, ROOM_SIZE * -0.8 );
-        // addRack( rack_num, 0, 0, 0 );
     }
 
-    // reset();
+    reset();
 
 
     // functions
@@ -86,13 +85,6 @@ function initQuanah()
         var cpu = new THREE.Mesh( cpu_geometry, cpu_material );
         cpu.name = "rack_"+rack_num+"_host_"+host_num+"_cpu_"+cpu_num;
         cpu.type = "cpu";
-
-        // edges
-
-        // edges_geometry = new THREE.EdgesGeometry( cpu.geometry ); 
-        // edges_material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } );
-        // edges = new THREE.LineSegments( edges_geometry, edges_material );
-        // cpu.add( edges );
 
         var y = ( cpu_num%2 ) ? cpu_height/2 : -cpu_height/2;
         cpu.position.set( 0, y, 0 );

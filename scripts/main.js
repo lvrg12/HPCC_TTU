@@ -6,11 +6,15 @@ var json;
 var color_funct;
 var hostObj = {};
 var timeObj = {};
+
 var ROOM_SIZE = 1;
 var ELEVATION = ROOM_SIZE * 1.5;
+
 var RACK_NUM = 10;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
+var TS_NUM = 20;
+
 var selectedTimestamp = 1;
 var INTERSECTED;
 var isInit = true;
@@ -101,7 +105,7 @@ function init()
     initControlDesk();
 
     initRoom();
-    // initControlPanel();
+    initControlPanel();
     initQuanah();
     // initHPCC();
     initRenderer();
@@ -252,7 +256,7 @@ function initControlDesk()
 function initRoom()
 {
     var height = ROOM_SIZE;
-    var width = ROOM_SIZE * 7;
+    var width = ROOM_SIZE * 6;
     var depth = ROOM_SIZE * 2;
     var geometry = new THREE.BoxGeometry( width, height, depth );
 
