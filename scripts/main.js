@@ -108,7 +108,7 @@ function init()
     // initHPCC();
     // initRenderer();
 
-    window.addEventListener( 'resize', onResize, false );
+    // window.addEventListener( 'resize', onResize, false );
     // window.addEventListener( 'mousedown', onMouseDown, false );
 
     // request();
@@ -129,9 +129,9 @@ function loadJSON()
 
 function initCamera()
 {
-    camera = new THREE.PerspectiveCamera( 1, window.innerWidth / window.innerHeight, 1, 1 );
+    // camera = new THREE.PerspectiveCamera( 1, window.innerWidth / window.innerHeight, 1, 1 );
     document.querySelector('a-camera').object3D.name = "hppc_camera_group";
-    // camera = document.querySelector('a-camera').object3D.children[0];
+    camera = document.querySelector('a-camera').object3D.children[0];
     camera.name = "hpcc_camera";
     camera.position.set( 0, 0, 0 );
 }
