@@ -1,5 +1,5 @@
 var container, camera, scene, renderer, effect, clock, controls;
-var raycaster, raycasterObj;
+var raycaster;
 var cameraPositions;
 var pointer;
 var json;
@@ -96,9 +96,10 @@ function init()
 
     loadJSON();
     initScene();
-    // initCamera();
+    initCamera();
     // initPointer();
     initLight();
+    initInteractions();
 
     // initControl();
 
@@ -109,9 +110,10 @@ function init()
     // initRenderer();
 
     // window.addEventListener( 'resize', onResize, false );
-    // window.addEventListener( 'mousedown', onMouseDown, false );
+    window.addEventListener( 'mousedown', onMouseDown, false );
 
     // request();
+    console.log(scene);
 }
 
 function loadJSON()
@@ -231,6 +233,12 @@ function initControl()
     raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
 }
 
+function initInteractions()
+{
+    raycaster = AFRAME.scenes[0].querySelector('[raycaster]').object3D.el.components.raycaster;
+    console.log(raycaster);
+}
+
 function initRoom()
 {
     var height = ROOM_SIZE;
@@ -259,7 +267,7 @@ function initRoom()
     }
 
     var room = new THREE.Mesh( geometry, materials );
-    room.name = "room_HPCC";
+    room.name = "hpcc_room";
     room.type = "room";
     scene.add( room );
 }
@@ -355,9 +363,13 @@ function onMouseDown( event )
 {
     event.preventDefault();
 
-    raycasterObj.setFromCamera( mouse, camera );
+    // raycasterObj.setFromCamera( mouse, camera );
 
-    var intersects = raycasterObj.intersectObjects( service_control_panel.children );
+    // var intersects = raycasterObj.intersectObjects( service_control_panel.children );
+
+    var intersects = raycaster.refreshObjects();
+
+    console.log(raycaster);
 
     if ( intersects.length > 0 )  // service control panel was clicked
     {
@@ -455,7 +467,7 @@ function animate()
 {
     requestAnimationFrame( animate );
     // animateControls();
-    updateControlPanel();
+    // updateControlPanel();
     // render();
 }
 
