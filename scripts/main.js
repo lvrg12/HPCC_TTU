@@ -100,9 +100,7 @@ function init()
     // initPointer();
     initLight();
 
-    initControl();
-
-    console.log(scene);
+    // initControl();
 
     initRoom();
     initControlPanel();
@@ -111,7 +109,7 @@ function init()
     // initRenderer();
 
     window.addEventListener( 'resize', onResize, false );
-    window.addEventListener( 'mousedown', onMouseDown, false );
+    // window.addEventListener( 'mousedown', onMouseDown, false );
 
     // request();
 }
@@ -456,7 +454,7 @@ function animateControls()
 function animate()
 {
     requestAnimationFrame( animate );
-    animateControls();
+    // animateControls();
     // updateControlPanel();
     // render();
 }
