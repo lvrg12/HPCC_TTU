@@ -96,7 +96,7 @@ function init()
 
     loadJSON();
     initScene();
-    initCamera();
+    // initCamera();
     // initPointer();
     initLight();
 
@@ -104,7 +104,7 @@ function init()
 
     initRoom();
     // initControlPanel();
-    initQuanah();
+    // initQuanah();
     // initHPCC();
     // initRenderer();
 
