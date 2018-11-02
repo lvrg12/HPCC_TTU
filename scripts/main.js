@@ -85,7 +85,7 @@ var velocity = new THREE.Vector3();
 var direction = new THREE.Vector3();
 
 init();
-// animate();
+animate();
 
 // init
 
@@ -103,8 +103,8 @@ function init()
     // initControl();
 
     initRoom();
-    // initControlPanel();
-    // initQuanah();
+    initControlPanel();
+    initQuanah();
     // initHPCC();
     // initRenderer();
 
@@ -453,9 +453,9 @@ function animateControls()
 
 function animate()
 {
-    // requestAnimationFrame( animate );
+    requestAnimationFrame( animate );
     // animateControls();
-    // updateControlPanel();
+    updateControlPanel();
     // render();
 }
 
