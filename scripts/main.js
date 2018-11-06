@@ -135,7 +135,7 @@ function initCamera()
     document.querySelector('a-camera').object3D.name = "hppc_camera_group";
     camera = document.querySelector('a-camera').object3D.children[0];
     camera.name = "hpcc_camera";
-    camera.position.set( 0, -2, 0 );
+    camera.position.set( 0, 0, 0 );
 }
 
 function initPointer()
