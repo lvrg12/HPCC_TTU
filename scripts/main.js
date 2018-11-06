@@ -7,7 +7,7 @@ var color_funct;
 var hostObj = {};
 var timeObj = {};
 
-var ELEVATION = 2.25;
+var ELEVATION = 3;
 var ROOM_SIZE = 1;
 
 var RACK_NUM = 10;
