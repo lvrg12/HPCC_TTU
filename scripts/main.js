@@ -7,7 +7,7 @@ var color_funct;
 var hostObj = {};
 var timeObj = {};
 
-var ELEVATION = 0.5;
+var ELEVATION = 0;
 var ROOM_SIZE = 1;
 
 var RACK_NUM = 10;
@@ -99,7 +99,7 @@ function init()
     loadJSON();
     initScene();
     initCamera();
-    initPointer();
+    // initPointer();
     initLight();
     initInteractions();
 
