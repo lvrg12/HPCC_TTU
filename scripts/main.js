@@ -1,5 +1,5 @@
 var container, camera, scene, renderer, effect, clock, controls;
-var raycaster;
+var raycaster, mouse;
 var cameraPositions;
 var pointer;
 var json;
@@ -12,7 +12,7 @@ var ROOM_SIZE = 1;
 var RACK_NUM = 10;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
-var TS_NUM = 20;
+var TS_NUM = 19;
 
 var selectedTimestamp = 1;
 var INTERSECTED;
@@ -24,6 +24,7 @@ var updateTimestamp;
 var CP_SPEED = 0.01;
 
 var quanah;
+var cpu_marker;
 var service_control_panel;
 var time_control_panel;
 
@@ -109,11 +110,10 @@ function init()
     // initHPCC();
     // initRenderer();
 
-    // window.addEventListener( 'resize', onResize, false );
     window.addEventListener( 'mousedown', onMouseDown, false );
+    window.addEventListener( 'mousemove', onMouseMove, false );
 
     // request();
-    console.log(scene);
 }
 
 function loadJSON()
@@ -235,8 +235,9 @@ function initControl()
 
 function initInteractions()
 {
-    raycaster = AFRAME.scenes[0].querySelector('[raycaster]').object3D.el.components.raycaster;
-    console.log(raycaster);
+    // raycaster = AFRAME.scenes[0].querySelector('[raycaster]').object3D.el.components.raycaster;
+    raycaster = new THREE.Raycaster();
+    mouse = new THREE.Vector2();
 }
 
 function initRoom()
@@ -359,17 +360,19 @@ function onResize()
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
+function onMouseMove( event )
+{
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+}
+
 function onMouseDown( event )
 {
     event.preventDefault();
 
-    // raycasterObj.setFromCamera( mouse, camera );
+    raycaster.setFromCamera( mouse, camera );
 
-    // var intersects = raycasterObj.intersectObjects( service_control_panel.children );
-
-    var intersects = raycaster.refreshObjects();
-
-    console.log(raycaster);
+    var intersects = raycaster.intersectObjects( service_control_panel.children );
 
     if ( intersects.length > 0 )  // service control panel was clicked
     {
@@ -382,7 +385,7 @@ function onMouseDown( event )
     }
     else
     {
-        intersects = raycasterObj.intersectObjects( time_control_panel.children );
+        intersects = raycaster.intersectObjects( time_control_panel.children );
 
         if ( intersects.length > 0 )  // time control panel was clicked
         {
@@ -408,14 +411,14 @@ function onMouseDown( event )
         else
         {
 
-            intersects = raycasterObj.intersectObjects( scene.children );
+            intersects = raycaster.intersectObjects( scene.children );
 
             if ( intersects.length > 0 ) // something else was clicked
             {
                 INTERSECTED = intersects[ 0 ].object;
-                // console.log(INTERSECTED.name);
+                console.log(INTERSECTED.name);
             }
-            else
+            else // nothing was clicked
             {
                 console.log("nothing here");
             }
@@ -467,7 +470,7 @@ function animate()
 {
     requestAnimationFrame( animate );
     // animateControls();
-    // updateControlPanel();
+    updateControlPanel();
     // render();
 }
 

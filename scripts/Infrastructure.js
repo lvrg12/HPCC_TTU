@@ -10,6 +10,9 @@ function initQuanah()
         addRack( rack_num, -1*separation*RACK_NUM/2 + separation*rack_num - ROOM_SIZE/2, -height/8, ROOM_SIZE * -0.8 );
     }
 
+    addCPUMarker();
+
+    resetService();
     reset();
 
 
@@ -131,5 +134,15 @@ function initQuanah()
             obj.add( textMesh );
         } );
 
+    }
+
+    function addCPUMarker()
+    {
+        var cpu_marker_geometry = new THREE.BoxLineGeometry( width/2, height/60, depth, 1, 1, 1 );
+        var cpu_marker_material = new THREE.LineBasicMaterial( { color: 0xff0000, linewidth: 3 } );
+        cpu_marker = new THREE.LineSegments( cpu_marker_geometry, cpu_marker_material );
+        cpu_marker.name = "hpcc_cpu_marker";
+        cpu_marker.type = "cpu_marker";
+        scene.add(cpu_marker);
     }
 }

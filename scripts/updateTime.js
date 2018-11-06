@@ -18,9 +18,6 @@ function reset()
     // stop previous update service
     stopUpdate();
 
-    // reset service
-    resetService();
-
     // update service
     updateValues( selectedTimestamp );
 
@@ -64,10 +61,9 @@ function updateValues( timestamp )
                     {
                         timestamp++;
                         updateSelectedTimestamp( timestamp+"" );
-                        resetService();
                         updateValues( timestamp );
 
-                        if( time == 19 )
+                        if( time == TS_NUM-1 )
                             isInit = false;
                     }
                 }
@@ -77,6 +73,7 @@ function updateValues( timestamp )
 
 function updateService( service, keys, obj )
 {
+
     switch( service )
     {
         case "Temperature":
@@ -115,6 +112,7 @@ function updateTemperature( keys, obj )
     else
         var temperature = 0x222222;
 
+    updateCPUMarker( obj );
     obj.material.color = new THREE.Color( temperature );
 
 }
@@ -133,6 +131,7 @@ function updateCPULoad( keys, obj )
     else
         var load = 0x222222;
 
+    updateCPUMarker( obj );
     obj.material.color = new THREE.Color( load );
 
 }
@@ -151,6 +150,7 @@ function updateMemoryUsage( keys, obj )
     else
         var usage = 0x222222;
 
+    updateCPUMarker( obj );
     obj.material.color = new THREE.Color( usage );
 
 }
@@ -170,6 +170,7 @@ function updateFansSpeed( keys, obj )
     else
         var speed = 0x222222;
 
+    updateCPUMarker( obj );
     obj.material.color = new THREE.Color( speed );
 }
 
@@ -213,4 +214,13 @@ function updateColorRange( service )
         .range(arrColor)
         .interpolate(d3.interpolateHcl);
 
+}
+
+function updateCPUMarker( obj )
+{
+    var tmp = obj.matrixWorld.getPosition();
+
+    cpu_marker.position.x = tmp.x;
+    cpu_marker.position.y = tmp.y;
+    cpu_marker.position.z = tmp.z;
 }
