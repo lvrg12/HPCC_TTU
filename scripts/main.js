@@ -7,6 +7,7 @@ var color_funct;
 var hostObj = {};
 var timeObj = {};
 
+var ELEVATION = 2.25;
 var ROOM_SIZE = 1;
 
 var RACK_NUM = 10;
@@ -98,7 +99,7 @@ function init()
     loadJSON();
     initScene();
     initCamera();
-    // initPointer();
+    initPointer();
     initLight();
     initInteractions();
 
@@ -140,9 +141,9 @@ function initCamera()
 
 function initPointer()
 {
-    pointer = new Pointer( "media/img/circled-dot.png" );
+    pointer = new Pointer( "media/img/circled-dot.png", 0.0005 );
     camera.add( pointer );
-    pointer.position.set(0,0,-1);
+    pointer.position.set(0,0,-0.01);
 }
 
 function initScene()
@@ -270,7 +271,7 @@ function initRoom()
     var room = new THREE.Mesh( geometry, materials );
     room.name = "hpcc_room";
     room.type = "room";
-    room.translateY(2);
+    room.translateY(ELEVATION);
     scene.add( room );
 }
 

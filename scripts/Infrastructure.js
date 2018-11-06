@@ -39,7 +39,7 @@ function initQuanah()
         addQuanahLabel( "Rack " + rack_num, "rack", rack );
 
         rack.position.set( x, y, z );
-        rack.translateY(2);
+        rack.translateY(ELEVATION);
         scene.add( rack );
     }
 
