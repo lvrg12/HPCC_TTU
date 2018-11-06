@@ -99,7 +99,7 @@ function init()
     loadJSON();
     initScene();
     initCamera();
-    // initPointer();
+    initPointer();
     initLight();
     initInteractions();
 
