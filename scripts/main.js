@@ -148,7 +148,6 @@ function initPointer()
 function initScene()
 {
     scene = document.querySelector('a-scene').object3D;
-    scene.translateY(3);
 }
 
 function initLight()
@@ -271,6 +270,7 @@ function initRoom()
     var room = new THREE.Mesh( geometry, materials );
     room.name = "hpcc_room";
     room.type = "room";
+    room.translateY(2);
     scene.add( room );
 }
 
