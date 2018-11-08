@@ -7,9 +7,6 @@ var color_funct;
 var hostObj = {};
 var timeObj = {};
 
-var ELEVATION = 1.5;
-var FRONT = 3;
-
 var ROOM_SIZE = 1;
 
 var RACK_NUM = 10;
@@ -138,7 +135,7 @@ function initCamera()
     document.querySelector('a-camera').object3D.name = "hppc_camera_group";
     camera = document.querySelector('a-camera').object3D.children[0];
     camera.name = "hpcc_camera";
-    camera.position.set( 0, 0, 3 );
+    // camera.position.set( 0, 0, 3 );
 }
 
 function initPointer()
@@ -273,7 +270,7 @@ function initRoom()
     var room = new THREE.Mesh( geometry, materials );
     room.name = "hpcc_room";
     room.type = "room";
-    room.translateY(ELEVATION);
+    fixLocation(room);
     scene.add( room );
 }
 
@@ -356,12 +353,12 @@ function initRenderer()
 }
 
 // Extra
-// function fixLocation( obj )
-// {
-//     obj.translateX(  );
-//     obj.translateY( 1.5 );
-//     obj.translateZ(  );
-// }
+function fixLocation( obj )
+{
+    obj.translateX( 0 );
+    obj.translateY( 1.5 );
+    obj.translateZ( 3 );
+}
 
 // Events
 

@@ -3,8 +3,8 @@ function initControlPanel()
     initServiceControlPanel();
     initTimeControlPanel();
 
-    service_control_panel.translateY(ELEVATION);
-    time_control_panel.translateY(ELEVATION);
+    fixLocation(service_control_panel);
+    fixLocation(time_control_panel);
 }
 
 // service control panel init
