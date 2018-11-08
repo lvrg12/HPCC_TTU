@@ -8,6 +8,8 @@ var hostObj = {};
 var timeObj = {};
 
 var ELEVATION = 1.5;
+var FRONT = 3;
+
 var ROOM_SIZE = 1;
 
 var RACK_NUM = 10;
@@ -136,7 +138,7 @@ function initCamera()
     document.querySelector('a-camera').object3D.name = "hppc_camera_group";
     camera = document.querySelector('a-camera').object3D.children[0];
     camera.name = "hpcc_camera";
-    // camera.position.set( 0, 0, 0 );
+    camera.position.set( 0, 0, 3 );
 }
 
 function initPointer()
@@ -352,6 +354,14 @@ function initRenderer()
     renderer.setSize( window.innerWidth, window.innerHeight );
     container.appendChild( renderer.domElement );
 }
+
+// Extra
+// function fixLocation( obj )
+// {
+//     obj.translateX(  );
+//     obj.translateY( 1.5 );
+//     obj.translateZ(  );
+// }
 
 // Events
 
