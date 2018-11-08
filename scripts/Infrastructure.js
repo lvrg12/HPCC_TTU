@@ -140,7 +140,7 @@ function initQuanah()
     function addCPUMarker()
     {
         var cpu_marker_geometry = new THREE.BoxLineGeometry( width/2, height/60, depth, 1, 1, 1 );
-        var cpu_marker_material = new THREE.LineBasicMaterial( { color: 0xff0000, linewidth: 3 } );
+        var cpu_marker_material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 3 } );
         cpu_marker = new THREE.LineSegments( cpu_marker_geometry, cpu_marker_material );
         cpu_marker.name = "hpcc_cpu_marker";
         cpu_marker.type = "cpu_marker";
