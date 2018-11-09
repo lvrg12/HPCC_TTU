@@ -221,6 +221,6 @@ function updateCPUMarker( obj )
     var tmp = obj.matrixWorld.getPosition();
 
     cpu_marker.position.x = tmp.x;
-    cpu_marker.position.y = tmp.y;
+    cpu_marker.position.y = tmp.y + 0.005;
     cpu_marker.position.z = tmp.z;
 }
