@@ -357,7 +357,7 @@ function fixLocation( obj )
 {
     obj.translateX( 0 );
     obj.translateY( 1.5 );
-    obj.translateZ( 3 );
+    obj.translateZ( 0 );
 }
 
 // Events
