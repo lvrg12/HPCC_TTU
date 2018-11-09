@@ -48,7 +48,7 @@ function initQuanah()
         var host_height = height/30;
 
         var host_geometry = new THREE.BoxLineGeometry( width/2, host_height, depth, 1, 1, 1 );
-        var host_material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } );
+        var host_material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 0.1 } );
         var host = new THREE.LineSegments( host_geometry, host_material );
         host.name = "rack_"+rack_num+"_host_"+host_num;
         host.type = "host";
@@ -108,7 +108,7 @@ function initQuanah()
         }
         else if( type == "host" )
         {
-            size = height/40, x = -0.08, y = -0.01, z = 0.06;
+            size = height/50, x = -0.08, y = -0.005, z = 0.06;
         }
         else
         {
