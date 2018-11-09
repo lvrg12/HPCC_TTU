@@ -98,7 +98,7 @@ function init()
     loadJSON();
     initScene();
     initCamera();
-    initPointer();
+    // initPointer();
     initLight();
     initInteractions();
 
@@ -140,9 +140,9 @@ function initCamera()
 
 function initPointer()
 {
-    pointer = new Pointer( "media/img/circled-dot.png", 0.05 );
+    pointer = new Pointer( "media/img/circled-dot.png", 0.0005 );
     camera.add( pointer );
-    pointer.position.set(0,0,-0.8);
+    pointer.position.set(0,0,-0.01);
 }
 
 function initScene()
