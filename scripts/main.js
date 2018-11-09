@@ -140,9 +140,9 @@ function initCamera()
 
 function initPointer()
 {
-    pointer = new Pointer( "media/img/circled-dot.png", 0.0005 );
+    pointer = new Pointer( "media/img/circled-dot.png", 0.005 );
     camera.add( pointer );
-    pointer.position.set(0,0,-0.01);
+    pointer.position.set(0,0,-0.1);
 }
 
 function initScene()
