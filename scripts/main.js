@@ -356,7 +356,7 @@ function initRenderer()
 function fixLocation( obj )
 {
     obj.translateX( 0 );
-    obj.translateY( 1.5 );
+    obj.translateY( 0 );
     obj.translateZ( 0 );
 }
 
@@ -379,7 +379,7 @@ function onMouseDown( event )
 {
     event.preventDefault();
 
-    raycaster.setFromCamera( mouse, camera );
+    raycaster.setFromCamera( new THREE.Vector2( 0, 0 ), camera );
 
     var intersects = raycaster.intersectObjects( service_control_panel.children );
 
