@@ -278,7 +278,7 @@ function fixLocation( obj )
     obj.translateY( 1.5 );
     obj.translateZ( 0 );
 
-    camera.translateY( -1.5 );
+    camera.translateY( 0 );
 }
 
 // Events
