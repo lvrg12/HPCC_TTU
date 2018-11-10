@@ -136,9 +136,9 @@ function initCamera()
     camera.type = "hpcc_camera"
     camera.name = "camera";
 
-    pointer = camera.el.lastElementChild.object3D;
-    pointer.type = "hpcc_pointer"
-    pointer.name = "pointer";
+    // pointer = camera.el.lastElementChild.object3D;
+    // pointer.type = "hpcc_pointer"
+    // pointer.name = "pointer";
 }
 
 function initScene()
@@ -275,7 +275,7 @@ function initRenderer()
 function fixLocation( obj )
 {
     obj.translateX( 0 );
-    obj.translateY( 0 );
+    obj.translateY( 1.5 );
     obj.translateZ( 0 );
 }
 
@@ -300,6 +300,8 @@ function onMouseDown( event )
 
     // for some reason 2 event happen at the same time
     if( !event.isTrusted ) return;
+
+    // console.log( scene );
 
     raycaster.setFromCamera( new THREE.Vector2( 0, 0 ), camera );
 
