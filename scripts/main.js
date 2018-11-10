@@ -275,7 +275,7 @@ function initRenderer()
 function fixLocation( obj )
 {
     obj.translateX( 0 );
-    obj.translateY( 1.5 );
+    obj.translateY( 0 );
     obj.translateZ( 0 );
 
     // camera.translateY( 0 );
