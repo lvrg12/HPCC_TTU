@@ -109,8 +109,8 @@ function init()
     // initRenderer();
 
     window.addEventListener( 'mousedown', onMouseDown, false );
-    window.addEventListener( 'touchstart', onDocTouch, false );
-    window.addEventListener( 'touchend', onDocRelease, false );
+    // window.addEventListener( 'touchstart', onDocTouch, false );
+    // window.addEventListener( 'touchend', onDocRelease, false );
     // window.addEventListener( 'mousemove', onMouseMove, false );
 
     // request();
@@ -277,6 +277,8 @@ function fixLocation( obj )
     obj.translateX( 0 );
     obj.translateY( 1.5 );
     obj.translateZ( 0 );
+
+    camera.translateY( 1.5 );
 }
 
 // Events
