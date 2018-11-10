@@ -1,14 +1,12 @@
 var container, camera, scene, renderer, effect, clock, controls;
-var raycaster, mouse;
+var raycaster, mouse, pointer;
 var cameraPositions;
-var pointer;
 var json;
 var color_funct;
 var hostObj = {};
 var timeObj = {};
 
 var ROOM_SIZE = 1;
-
 var RACK_NUM = 10;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
@@ -20,6 +18,7 @@ var isInit = true;
 
 var updateHost;
 var updateTimestamp;
+var move_timer;
 
 var CP_SPEED = 0.01;
 
@@ -132,11 +131,12 @@ function initCamera()
 {
     document.querySelector('a-camera').object3D.name = "hppc_camera_group";
     camera = document.querySelector('a-camera').object3D.children[1];
-    camera.name = "hpcc_camera";
+    camera.type = "hpcc_camera"
+    camera.name = "camera";
 
     pointer = camera.el.lastElementChild.object3D;
-    pointer.position.set( 0, 0, -1 );
-    pointer.scale.set( 1, 1, 1 );
+    pointer.type = "hpcc_pointer"
+    pointer.name = "pointer";
 }
 
 function initScene()
@@ -151,85 +151,8 @@ function initLight()
     light.name = "hpcc_light";
 }
 
-function initControl()
-{
-    raycasterObj = new THREE.Raycaster();
-    mouse = new THREE.Vector2();
-
-    controls = new THREE.PointerLockControls( camera );
-
-    var blocker = document.getElementById( 'blocker' );
-    var instructions = document.getElementById( 'instructions' );
-
-    instructions.addEventListener( 'click', function ( event ){
-        controls.lock();
-    }, false );
-
-    controls.addEventListener( 'lock', function() {
-        instructions.style.display = 'none';
-        blocker.style.display = 'none';
-    } );
-
-    controls.addEventListener( 'unlock', function() {
-        blocker.style.display = 'block';
-        instructions.style.display = '';
-    } );
-
-    scene.add( controls.getObject() );
-
-    var onKeyDown = function ( event ) {
-        switch ( event.keyCode ) {
-            case 38: // up
-            case 87: // w
-                moveForward = true;
-                break;
-            case 37: // left
-            case 65: // a
-                moveLeft = true; break;
-            case 40: // down
-            case 83: // s
-                moveBackward = true;
-                break;
-            case 39: // right
-            case 68: // d
-                moveRight = true;
-                break;
-            case 32: // space
-                if ( canJump === true ) velocity.y += 200;
-                canJump = false;
-                break;
-        }
-    };
-
-    var onKeyUp = function ( event ) {
-        switch( event.keyCode ) {
-            case 38: // up
-            case 87: // w
-                moveForward = false;
-                break;
-            case 37: // left
-            case 65: // a
-                moveLeft = false;
-                break;
-            case 40: // down
-            case 83: // s
-                moveBackward = false;
-                break;
-            case 39: // right
-            case 68: // d
-                moveRight = false;
-                break;
-        }
-    };
-
-    document.addEventListener( 'keydown', onKeyDown, false );
-    document.addEventListener( 'keyup', onKeyUp, false );
-    raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
-}
-
 function initInteractions()
 {
-    // raycaster = AFRAME.scenes[0].querySelector('[raycaster]').object3D.el.components.raycaster;
     raycaster = new THREE.Raycaster();
     mouse = new THREE.Vector2();
 }
@@ -373,6 +296,9 @@ function onMouseDown( event )
 {
     event.preventDefault();
 
+    // for some reason 2 event happen at the same time
+    if( !event.isTrusted ) return;
+
     raycaster.setFromCamera( new THREE.Vector2( 0, 0 ), camera );
 
     var intersects = raycaster.intersectObjects( service_control_panel.children );
@@ -428,45 +354,21 @@ function onMouseDown( event )
     }
 }
 
-// Animate & Render
-
-
-function animateControls()
+function onDocTouch( event )
 {
-    if ( controls.isLocked === true )
-    {
-        raycaster.ray.origin.copy( controls.getObject().position );
-        raycaster.ray.origin.y -= 10;
-
-        var intersections = raycaster.intersectObjects( objects );
-        var onObject = intersections.length > 0;
-        var time = performance.now();
-        var delta = ( time - prevTime ) / 1000;
-
-        velocity.x -= velocity.x * 10.0 * delta;
-        velocity.z -= velocity.z * 10.0 * delta;
-        velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-        direction.z = Number( moveForward ) - Number( moveBackward );
-        direction.x = Number( moveLeft ) - Number( moveRight );
-        direction.normalize(); // this ensures consistent movements in all directions
-
-        if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
-        if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
-        if ( onObject === true ) {
-            velocity.y = Math.max( 0, velocity.y );
-            canJump = true;
-        }
-        controls.getObject().translateX( velocity.x * delta );
-        controls.getObject().translateY( velocity.y * delta );
-        controls.getObject().translateZ( velocity.z * delta );
-        if ( controls.getObject().position.y < 10 ) {
-            velocity.y = 0;
-            controls.getObject().position.y = 10;
-            canJump = true;
-        }
-        prevTime = time;
-    }
+    event.preventDefault();
+    move_timer = setInterval( function()
+                            {
+                                camera.translateZ( -0.01 );
+                            } , 10);
 }
+
+function onDocRelease( event )
+{
+    if( move_timer ) clearInterval(move_timer);
+}
+
+// Animate & Render
 
 function animate()
 {
@@ -475,8 +377,3 @@ function animate()
     updateControlPanel();
     // render();
 }
-
-// function render()
-// {
-//     renderer.render( scene, camera );
-// }
