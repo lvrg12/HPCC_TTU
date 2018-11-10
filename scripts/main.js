@@ -301,7 +301,7 @@ function onMouseDown( event )
     event.preventDefault();
 
     // for some reason 2 event happen at the same time
-    if( !event.isTrusted ) return;
+    if( event.isTrusted ) return;
 
     // console.log( scene );
 
