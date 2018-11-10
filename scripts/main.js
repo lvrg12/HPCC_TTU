@@ -100,7 +100,6 @@ function init()
     initLight();
     initInteractions();
 
-    // initControl();
 
     initRoom();
     initControlPanel();
