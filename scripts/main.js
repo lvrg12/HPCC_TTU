@@ -98,7 +98,6 @@ function init()
     loadJSON();
     initScene();
     initCamera();
-    // initPointer();
     initLight();
     initInteractions();
 
@@ -111,7 +110,7 @@ function init()
     // initRenderer();
 
     window.addEventListener( 'mousedown', onMouseDown, false );
-    window.addEventListener( 'mousemove', onMouseMove, false );
+    // window.addEventListener( 'mousemove', onMouseMove, false );
 
     // request();
 }
@@ -131,18 +130,13 @@ function loadJSON()
 
 function initCamera()
 {
-    // camera = new THREE.PerspectiveCamera( 1, window.innerWidth / window.innerHeight, 1, 1 );
     document.querySelector('a-camera').object3D.name = "hppc_camera_group";
-    camera = document.querySelector('a-camera').object3D.children[0];
+    camera = document.querySelector('a-camera').object3D.children[1];
     camera.name = "hpcc_camera";
-    // camera.position.set( 0, 0, 3 );
-}
 
-function initPointer()
-{
-    pointer = new Pointer( "media/img/circled-dot.png", 0.0005 );
-    camera.add( pointer );
-    pointer.position.set(0,0,-0.01);
+    pointer = camera.el.lastElementChild.object3D;
+    pointer.position.set( 0, 0, -0.01 );
+    pointer.scale.set( 0.01, 0.01, 0.01 );
 }
 
 function initScene()
@@ -386,7 +380,6 @@ function onMouseDown( event )
     if ( intersects.length > 0 )  // service control panel was clicked
     {
         isInit = false;
-
         INTERSECTED = intersects[ 0 ].object;
         updateSelectedService(INTERSECTED);
         reset();
