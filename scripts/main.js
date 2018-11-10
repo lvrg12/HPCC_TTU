@@ -109,8 +109,8 @@ function init()
     // initRenderer();
 
     window.addEventListener( 'mousedown', onMouseDown, false );
-    // window.addEventListener( 'touchstart', onDocTouch, false );
-    // window.addEventListener( 'touchend', onDocRelease, false );
+    window.addEventListener( 'touchstart', onDocTouch, false );
+    window.addEventListener( 'touchend', onDocRelease, false );
     // window.addEventListener( 'mousemove', onMouseMove, false );
 
     // request();
