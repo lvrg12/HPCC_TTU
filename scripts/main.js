@@ -135,8 +135,8 @@ function initCamera()
     camera.name = "hpcc_camera";
 
     pointer = camera.el.lastElementChild.object3D;
-    pointer.position.set( 0, 0, -0.1 );
-    pointer.scale.set( 0.1, 0.1, 0.1 );
+    pointer.position.set( 0, 0, -1 );
+    pointer.scale.set( 1, 1, 1 );
 }
 
 function initScene()
