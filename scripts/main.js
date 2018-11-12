@@ -365,7 +365,10 @@ function onDocTouch( event )
     event.preventDefault();
     move_timer = setInterval( function()
                             {
-                                camera.translateZ( -0.01 );
+                                // cameraHolder.translateZ( -0.01 );
+                                var direction = camera.getWorldDirection();
+                                cameraHost.position.add( direction.multiplyScalar( -0.01 ) );
+
                             } , 5);
 }
 
