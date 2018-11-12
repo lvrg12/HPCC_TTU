@@ -138,8 +138,6 @@ function initCamera()
     camera.type = "hpcc_camera"
     camera.name = "camera";
 
-    cameraHolder.rotation = camera.rotation;
-
     // pointer = camera.el.lastElementChild.object3D;
     // pointer.type = "hpcc_pointer"
     // pointer.name = "pointer";
@@ -381,6 +379,7 @@ function onDocRelease( event )
 function animate()
 {
     requestAnimationFrame( animate );
+    cameraHolder.rotation = camera.rotation;
     // animateControls();
     updateControlPanel();
     // render();
