@@ -1,6 +1,6 @@
 var container, camera, scene, renderer, effect, clock, controls;
 var raycaster, mouse, pointer;
-var cameraPositions;
+var cameraHolder;
 var json;
 var color_funct;
 var hostObj = {};
@@ -108,8 +108,8 @@ function init()
     // initRenderer();
 
     window.addEventListener( 'mousedown', onMouseDown, false );
-    // window.addEventListener( 'touchstart', onDocTouch, false );
-    // window.addEventListener( 'touchend', onDocRelease, false );
+    window.addEventListener( 'touchstart', onDocTouch, false );
+    window.addEventListener( 'touchend', onDocRelease, false );
     // window.addEventListener( 'mousemove', onMouseMove, false );
 
     // request();
@@ -130,6 +130,9 @@ function loadJSON()
 
 function initCamera()
 {
+    cameraHolder = document.querySelector('a-entity').object3D;
+    cameraHolder.name = "cameraHolder";
+
     document.querySelector('a-camera').object3D.name = "hppc_camera_group";
     camera = document.querySelector('a-camera').object3D.children[1];
     camera.type = "hpcc_camera"
@@ -362,8 +365,8 @@ function onDocTouch( event )
     event.preventDefault();
     move_timer = setInterval( function()
                             {
-                                camera.translateZ( 0.01 );
-                            } , 10);
+                                cameraHolder.translateZ( -0.01 );
+                            } , 5);
 }
 
 function onDocRelease( event )
