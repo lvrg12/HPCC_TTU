@@ -367,7 +367,7 @@ function onDocTouch( event )
                             {
                                 // cameraHolder.translateZ( -0.01 );
                                 var direction = camera.getWorldDirection();
-                                cameraHost.position.add( direction.multiplyScalar( -0.01 ) );
+                                cameraHost.position.add( direction.multiplyScalar( 1 ) );
 
                             } , 5);
 }
