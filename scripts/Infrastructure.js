@@ -6,6 +6,7 @@ function initQuanah()
     separation = width + width*0.3;
 
     quanah = new THREE.Group();
+    quanah.name = "quanah";
 
     for( var rack_num=1; rack_num<=RACK_NUM; rack_num++ )
     {
@@ -50,7 +51,7 @@ function initQuanah()
         var host_height = height/30;
 
         var host_geometry = new THREE.BoxLineGeometry( width/2, host_height, depth, 1, 1, 1 );
-        var host_material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 0.1 } );
+        var host_material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 0.5 } );
         var host = new THREE.LineSegments( host_geometry, host_material );
         host.name = "rack_"+rack_num+"_host_"+host_num;
         host.type = "host";

@@ -18,7 +18,6 @@ function onMouseDown( event )
 
     raycaster.setFromCamera( new THREE.Vector2( 0, 0 ), camera );
     var intersects;
-    console.log(scene);
 
     // check if something was clicked
     if( isHostClicked() )
@@ -34,21 +33,20 @@ function onMouseDown( event )
 
 
     // check if a quanah host was clicked
-    function isServiceControlPanelClicked()
+    function isHostClicked()
     {
-        intersects = raycaster.intersectObjects( service_control_panel.children );
-        if ( intersects.length > 0 )
+
+        for( var r=0; r<RACK_NUM; r++ )
         {
-            isInit = false;
-            INTERSECTED = intersects[ 0 ].object;
-            updateSelectedService(INTERSECTED);
-            reset();
-            return true;
+            intersects = raycaster.intersectObjects( quanah.children[r].children );
+            if( intersects.length > 0 )
+            {
+                INTERSECTED = intersects[ 0 ].object;
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
+
+        return false
     }
     
     // check if service control panel was clicked

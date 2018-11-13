@@ -12,8 +12,6 @@ function initServiceControlPanel()
     var r = s/(2*Math.tan(Math.PI/num)) + s/15;
 
     service_control_panel = new THREE.Group();
-
-    service_control_panel.type = "control_panel";
     service_control_panel.name = "service_control_panel";
 
     for( var i=0; i<num; i++ )
@@ -97,8 +95,6 @@ function initServiceControlPanel()
 function initTimeControlPanel()
 {
     time_control_panel = new THREE.Group();
-
-    service_control_panel.type = "control_panel";
     service_control_panel.name = "time_control_panel";
 
     var r = ROOM_SIZE * 0.25;

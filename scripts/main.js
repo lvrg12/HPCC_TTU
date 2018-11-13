@@ -145,6 +145,7 @@ function initCamera()
 function initScene()
 {
     scene = document.querySelector('a-scene').object3D;
+    scene.name = "hpcc";
 }
 
 function initLight()
