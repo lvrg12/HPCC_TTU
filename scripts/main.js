@@ -111,10 +111,6 @@ function init()
     window.addEventListener( 'touchstart', onDocTouch, false );
     window.addEventListener( 'touchend', onDocRelease, false );
 
-    // window.addEventListener( 'mousedown', onDocTouch, false );
-    // window.addEventListener( 'mouseup', onDocRelease, false );
-    // window.addEventListener( 'mousemove', onMouseMove, false );
-
     // request();
 }
 
@@ -194,7 +190,6 @@ function initRoom()
     var room = new THREE.Mesh( geometry, materials );
     room.name = "hpcc_room";
     room.type = "room";
-    fixLocation(room);
     scene.add( room );
 }
 
@@ -276,114 +271,10 @@ function initRenderer()
     container.appendChild( renderer.domElement );
 }
 
-// Extra
-function fixLocation( obj )
-{
-    obj.translateX( 0 );
-    obj.translateY( 0 );
-    obj.translateZ( 0 );
-}
-
-// Events
-
-function onResize()
-{
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-}
-
-function onMouseMove( event )
-{
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-}
-
-function onMouseDown( event )
-{
-    event.preventDefault();
-
-    // for some reason 2 event happen at the same time
-    if( event.isTrusted ) return;
-
-    // console.log( scene );
-
-    raycaster.setFromCamera( new THREE.Vector2( 0, 0 ), camera );
-
-    var intersects = raycaster.intersectObjects( service_control_panel.children );
-
-    if ( intersects.length > 0 )  // service control panel was clicked
-    {
-        isInit = false;
-        INTERSECTED = intersects[ 0 ].object;
-        updateSelectedService(INTERSECTED);
-        reset();
-        console.log(INTERSECTED.name);
-    }
-    else
-    {
-        intersects = raycaster.intersectObjects( time_control_panel.children );
-
-        if ( intersects.length > 0 )  // time control panel was clicked
-        {
-
-            INTERSECTED = intersects[ 0 ].object;
-
-            if( INTERSECTED.type == "timestamp" ) // change timestamp
-            {
-                isInit = false;
-                selectedTimestamp = parseInt(INTERSECTED.name);
-                reset();
-                console.log(INTERSECTED.name);
-            }
-
-            if( INTERSECTED.type == "REALTIME" ) // change time to REALTIME
-            {
-                isInit = false;
-                // reset();
-                console.log(INTERSECTED.name);
-            }
-
-        }
-        else
-        {
-
-            intersects = raycaster.intersectObjects( scene.children );
-
-            if ( intersects.length > 0 ) // something else was clicked
-            {
-                INTERSECTED = intersects[ 0 ].object;
-                console.log(INTERSECTED.name);
-            }
-            else // nothing was clicked
-            {
-                console.log("nothing here");
-            }
-        }
-    }
-}
-
-function onDocTouch( event )
-{
-    event.preventDefault();
-    move_timer = setInterval( function()
-                            {
-                                var direction = new THREE.Vector3().copy(camera.getWorldDirection());
-                                cameraHolder.position.add(direction.multiplyScalar(0.01));
-                                cameraHolder.position.y = -1.5;
-
-                            } , 5);
-}
-
-function onDocRelease( event )
-{
-    if( move_timer ) clearInterval(move_timer);
-}
-
 // Animate & Render
 
 function animate()
 {
     requestAnimationFrame( animate );
-    updateControlPanel();
+    animateControlPanel();
 }

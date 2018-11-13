@@ -5,13 +5,16 @@ function initQuanah()
     width = ROOM_SIZE*0.4;
     separation = width + width*0.3;
 
+    quanah = new THREE.Group();
+
     for( var rack_num=1; rack_num<=RACK_NUM; rack_num++ )
     {
-        addRack( rack_num, -1*separation*RACK_NUM/2 + separation*rack_num - ROOM_SIZE/2, -height/8, ROOM_SIZE * -0.8 );
+        quanah.add(addRack( rack_num, -1*separation*RACK_NUM/2 + separation*rack_num - ROOM_SIZE/2, -height/8, ROOM_SIZE * -0.8 ));
     }
 
-    addCPUMarker();
+    scene.add(quanah);
 
+    addCPUMarker();
     resetService();
     reset();
 
@@ -39,8 +42,7 @@ function initQuanah()
         addQuanahLabel( "Rack " + rack_num, "rack", rack );
 
         rack.position.set( x, y, z );
-        fixLocation(rack);
-        scene.add( rack );
+        return rack;
     }
 
     function addHost( rack_num, host_num )

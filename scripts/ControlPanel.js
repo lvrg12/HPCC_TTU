@@ -2,9 +2,6 @@ function initControlPanel()
 {
     initServiceControlPanel();
     initTimeControlPanel();
-
-    fixLocation(service_control_panel);
-    fixLocation(time_control_panel);
 }
 
 // service control panel init
@@ -291,8 +288,8 @@ function updateSelectedTimestamp( name )
 
 }
 
-// update control panel movement
-function updateControlPanel()
+// animate control panel movement
+function animateControlPanel()
 {
     service_control_panel.rotation.y -= CP_SPEED;
     time_control_panel.rotation.z += CP_SPEED/4;
