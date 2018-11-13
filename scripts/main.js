@@ -385,8 +385,5 @@ function onDocRelease( event )
 function animate()
 {
     requestAnimationFrame( animate );
-    cameraHolder.rotation = camera.rotation;
-    // animateControls();
     updateControlPanel();
-    // render();
 }
