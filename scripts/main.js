@@ -373,7 +373,7 @@ function onDocTouch( event )
                             {
                                 // cameraHolder.translateZ( -0.01 );
                                 var direction = new THREE.Vector3().copy(camera.getWorldDirection());
-                                camera.parent.position.add(direction.multiplyScalar(0.1));
+                                camera.parent.position.add(direction.multiplyScalar(0.01));
 
                             } , 5);
 }
