@@ -371,9 +371,9 @@ function onDocTouch( event )
     event.preventDefault();
     move_timer = setInterval( function()
                             {
-                                cameraHolder.translateZ( -0.01 );
-                                // var direction = new THREE.Vector3().copy(camera.getWorldDirection());
-                                // cameraHolder.position.add(direction.multiplyScalar(0.01));
+                                // cameraHolder.translateZ( -0.01 );
+                                var direction = new THREE.Vector3().copy(camera.getWorldDirection());
+                                cameraHolder.position.add(direction.multiplyScalar(0.01));
 
                             } , 5);
 }
