@@ -111,8 +111,8 @@ function init()
     window.addEventListener( 'touchstart', onDocTouch, false );
     window.addEventListener( 'touchend', onDocRelease, false );
 
-    window.addEventListener( 'mousedown', onDocTouch, false );
-    window.addEventListener( 'mouseup', onDocRelease, false );
+    // window.addEventListener( 'mousedown', onDocTouch, false );
+    // window.addEventListener( 'mouseup', onDocRelease, false );
     // window.addEventListener( 'mousemove', onMouseMove, false );
 
     // request();
@@ -303,6 +303,9 @@ function onMouseDown( event )
 {
     event.preventDefault();
 
+    var direction = camera.getWorldDirection();
+    console.log(direction);
+
     // for some reason 2 event happen at the same time
     if( event.isTrusted ) return;
 
@@ -369,8 +372,8 @@ function onDocTouch( event )
     move_timer = setInterval( function()
                             {
                                 // cameraHolder.translateZ( -0.01 );
-                                var direction = camera.getWorldDirection();
-                                cameraHolder.position.add( direction.multiplyScalar( 1 ) );
+                                var direction = new THREE.Vector3().copy(camera.getWorldDirection());
+                                camera.parent.position.add(direction.multiplyScalar(0.1));
 
                             } , 5);
 }
