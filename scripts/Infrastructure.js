@@ -53,8 +53,11 @@ function initQuanah()
         var host_geometry = new THREE.BoxLineGeometry( width/2, host_height, depth, 1, 1, 1 );
         var host_material = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 0.5 } );
         var host = new THREE.LineSegments( host_geometry, host_material );
+        // var host = new THREE.Group();
         host.name = "rack_"+rack_num+"_host_"+host_num;
         host.type = "host";
+
+        host.position.set( 0, 0, 0 );
 
         for( var cpu_num=1; cpu_num<=CPU_NUM; cpu_num++ )
         {
@@ -66,11 +69,11 @@ function initQuanah()
 
         if( host_num%2 == 1 )
         {
-            y = height/2-(host_num%60)*height/60;
+            y = host_height*15-(host_num)*height/60;
         }
         else
         {
-            y = height/2-((host_num-1)%60)*height/60;
+            y = host_height*15-(host_num-1)*height/60;
         }
 
         x = (!(host_num%2))*width/2;
@@ -100,9 +103,7 @@ function initQuanah()
     function addQuanahLabel( text, type, obj )
     {
         var loader = new THREE.FontLoader();
-
         var material_text = new THREE.MeshBasicMaterial( { color: 0x000000 } );
-
         var size, x, y, z;
 
         if( type == "rack" )
@@ -111,7 +112,7 @@ function initQuanah()
         }
         else if( type == "host" )
         {
-            size = height/50, x = -0.08, y = -0.005, z = 0.06;
+            size = height/60, x = -0.09, y = -0.005, z = depth/2+0.001;
         }
         else
         {

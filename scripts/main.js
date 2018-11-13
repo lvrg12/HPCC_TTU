@@ -111,6 +111,8 @@ function init()
     window.addEventListener( 'touchstart', onDocTouch, false );
     window.addEventListener( 'touchend', onDocRelease, false );
 
+    window.addEventListener( 'mousemove', onMouseMove, false );
+
     // request();
 }
 

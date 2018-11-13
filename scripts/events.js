@@ -8,6 +8,13 @@ function onResize()
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
+// on mouse moving
+function onMouseMove( event )
+{
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+}
+
 // on mouse clicked / screen touched
 function onMouseDown( event )
 {
