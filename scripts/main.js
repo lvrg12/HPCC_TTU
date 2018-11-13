@@ -303,9 +303,6 @@ function onMouseDown( event )
 {
     event.preventDefault();
 
-    var direction = camera.getWorldDirection();
-    console.log(direction);
-
     // for some reason 2 event happen at the same time
     if( event.isTrusted ) return;
 
@@ -371,9 +368,9 @@ function onDocTouch( event )
     event.preventDefault();
     move_timer = setInterval( function()
                             {
-                                // cameraHolder.translateZ( -0.01 );
                                 var direction = new THREE.Vector3().copy(camera.getWorldDirection());
                                 cameraHolder.position.add(direction.multiplyScalar(0.01));
+                                cameraHolder.position.y = -1.5;
 
                             } , 5);
 }
