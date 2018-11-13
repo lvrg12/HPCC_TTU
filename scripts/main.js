@@ -110,6 +110,9 @@ function init()
     window.addEventListener( 'mousedown', onMouseDown, false );
     window.addEventListener( 'touchstart', onDocTouch, false );
     window.addEventListener( 'touchend', onDocRelease, false );
+
+    window.addEventListener( 'mousedown', onDocTouch, false );
+    window.addEventListener( 'mouseup', onDocRelease, false );
     // window.addEventListener( 'mousemove', onMouseMove, false );
 
     // request();
@@ -367,7 +370,7 @@ function onDocTouch( event )
                             {
                                 // cameraHolder.translateZ( -0.01 );
                                 var direction = camera.getWorldDirection();
-                                cameraHost.position.add( direction.multiplyScalar( 1 ) );
+                                cameraHolder.position.add( direction.multiplyScalar( 1 ) );
 
                             } , 5);
 }
