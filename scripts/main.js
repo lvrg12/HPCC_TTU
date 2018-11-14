@@ -104,6 +104,7 @@ function init()
     initRoom();
     initControlPanel();
     initQuanah();
+    initHTMLTest();
     // initHPCC();
     // initRenderer();
 
@@ -114,6 +115,29 @@ function init()
     window.addEventListener( 'mousemove', onMouseMove, false );
 
     // request();
+}
+
+function initHTMLTest()
+{
+    var node = document.createElement( "div" );
+    node.style.backgroundColor = "lightblue";
+    node.innerHTML = "HELLO WORLD";
+
+    domtoimage.toBlob(node).then(function (blob) {
+        window.saveAs(blob, 'my-node.png');
+    });
+
+    domtoimage.toPng(node)
+    .then(function (dataUrl) {
+        var img = new Image();
+        img.src = dataUrl;
+        document.getElementById('instructions').appendChild(img);
+        console.log(document.getElementById('instructions'));
+    })
+    .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+    });
+
 }
 
 function loadJSON()
