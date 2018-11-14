@@ -45,11 +45,14 @@ function onMouseDown( event )
 
         for( var r=0; r<RACK_NUM; r++ )
         {
-            intersects = raycaster.intersectObjects( quanah.children[r].children );
-            if( intersects.length > 0 )
+            for( var h=0; h<quanah.children[r].children.length; h++ )
             {
-                INTERSECTED = intersects[ 0 ].object;
-                return true;
+                intersects = raycaster.intersectObjects( quanah.children[r].children[h].children );
+                if( intersects.length > 0 )
+                {
+                    INTERSECTED = intersects[ 0 ].object.parent;;
+                    return true;
+                }
             }
         }
 
