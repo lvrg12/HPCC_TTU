@@ -139,9 +139,10 @@ function initCamera()
     camera.type = "hpcc_camera"
     camera.name = "camera";
 
-    // pointer = camera.el.lastElementChild.object3D;
-    // pointer.type = "hpcc_pointer"
-    // pointer.name = "pointer";
+    pointer = camera.el.lastElementChild.object3D.children[0];
+
+    pointer.material.depthTest = false;
+    pointer.name = "pointer";
 }
 
 function initScene()
