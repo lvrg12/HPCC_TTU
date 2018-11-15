@@ -50,12 +50,14 @@ function onMouseDown( event )
                 intersects = raycaster.intersectObjects( quanah.children[r].children[h].children );
                 if( intersects.length > 0 )
                 {
-                    INTERSECTED = intersects[ 0 ].object.parent;;
+                    INTERSECTED = intersects[ 0 ].object.parent;
+                    updateTooltip(INTERSECTED);
                     return true;
                 }
             }
         }
 
+        tooltip.visible = false;
         return false
     }
     

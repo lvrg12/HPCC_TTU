@@ -218,10 +218,20 @@ function updateColorRange( service )
 
 function updateCPUMarker( obj )
 {
-    var v = new THREE.Vector3()
-    var tmp = v.setFromMatrixPosition( obj.matrixWorld )
+    var pos = new THREE.Vector3().setFromMatrixPosition( obj.matrixWorld )
 
-    cpu_marker.position.x = tmp.x;
-    cpu_marker.position.y = tmp.y + 0.005;
-    cpu_marker.position.z = tmp.z;
+    cpu_marker.position.x = pos.x;
+    cpu_marker.position.y = pos.y + 0.005;
+    cpu_marker.position.z = pos.z;
+}
+
+function updateTooltip( host )
+{
+    tooltip.visible = true;
+    var pos = new THREE.Vector3().setFromMatrixPosition( camera.matrixWorld )
+
+    tooltip.position.x = pos.x;
+    tooltip.position.y = pos.y;
+    tooltip.position.z = pos.z - 0.2;
+
 }

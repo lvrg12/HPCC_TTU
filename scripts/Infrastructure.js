@@ -16,6 +16,7 @@ function initQuanah()
     scene.add(quanah);
 
     addCPUMarker();
+    addTooltip();
     resetService();
     reset();
 
@@ -150,4 +151,26 @@ function initQuanah()
         cpu_marker.type = "cpu_marker";
         scene.add(cpu_marker);
     }
+
+    function addTooltip()
+    {
+        var tt_height = height/3;
+        var tt_width = width/2;
+
+        var tt_texture = new THREE.TextureLoader().load( "media/img/" + serviceList[0] + ".png" );
+        var tt_geometry = new THREE.PlaneGeometry( tt_width, tt_height, tt_width );
+        var tt_material = new THREE.MeshBasicMaterial( { map: tt_texture } );
+        tooltip = new THREE.Mesh( tt_geometry, tt_material );
+        tooltip.visible = false;
+
+        scene.add( tooltip );
+    }
+}
+
+function animateTooltip()
+{
+    var v = new THREE.Vector3()
+    var tmp = v.setFromMatrixPosition( camera.matrixWorld )
+
+    tooltip.lookAt( tmp );
 }
