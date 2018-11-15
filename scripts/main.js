@@ -104,7 +104,7 @@ function init()
     initRoom();
     initControlPanel();
     initQuanah();
-    initHTMLTest();
+    // initHTMLTest();
     // initHPCC();
     // initRenderer();
 

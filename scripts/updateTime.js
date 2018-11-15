@@ -218,7 +218,8 @@ function updateColorRange( service )
 
 function updateCPUMarker( obj )
 {
-    var tmp = obj.matrixWorld.getPosition();
+    var v = new THREE.Vector3()
+    var tmp = v.setFromMatrixPosition( obj.matrixWorld )
 
     cpu_marker.position.x = tmp.x;
     cpu_marker.position.y = tmp.y + 0.005;
