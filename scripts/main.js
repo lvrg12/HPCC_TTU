@@ -15,6 +15,7 @@ var TS_NUM = 19;
 var selectedTimestamp = 1;
 var INTERSECTED;
 var isInit = true;
+var pngLoaded = false;
 
 var updateHost;
 var updateTimestamp;
@@ -25,6 +26,7 @@ var CP_SPEED = 0.01;
 var quanah;
 var cpu_marker;
 var tooltip;
+var tooltip_png;
 var service_control_panel;
 var time_control_panel;
 
@@ -122,12 +124,13 @@ function initImageHolder()
 {
     tooltip_html = document.createElement( "div" );
     tooltip_html.style.backgroundColor = "lightblue";
-    tooltip_html.style.width = "10%";
+    tooltip_html.style.width = "14%";
+    tooltip_html.style.fontSize = "40pt";
     tooltip_html.innerHTML = "HELLO WORLD";
     document.getElementById('holder').appendChild( tooltip_html );
     
     
-    var tooltip_png = new Image();
+    tooltip_png = new Image();
     tooltip_png.id = "png_tooltip"
     // document.getElementById('holder').appendChild( imageHolder );
     domtoimage.toJpeg( tooltip_html ).then( function(url) { tooltip_png.src = url; tooltip_html.style.display = "none";} );
@@ -299,6 +302,6 @@ function animate()
 {
     requestAnimationFrame( animate );
     animateControlPanel();
-    // animateTooltip();
+    animateTooltip();
     // console.log(imageHolder.src);
 }

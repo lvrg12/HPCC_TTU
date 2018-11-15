@@ -169,8 +169,10 @@ function initQuanah()
 
 function animateTooltip()
 {
-    var v = new THREE.Vector3()
-    var tmp = v.setFromMatrixPosition( camera.matrixWorld )
-
-    tooltip.lookAt( tmp );
+    if( !pngLoaded && tooltip_png.src != "" )
+    {
+        var tt_texture = new THREE.TextureLoader().load( tooltip_png.src );
+        tooltip.material = new THREE.MeshBasicMaterial( { map: tt_texture } );
+        pngLoaded = true;
+    }
 }

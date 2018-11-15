@@ -232,6 +232,7 @@ function updateTooltip( host )
 
     tooltip.position.x = pos.x;
     tooltip.position.y = pos.y;
-    tooltip.position.z = pos.z - 0.2;
+    tooltip.position.z = pos.z - 0.3;
 
+    console.log(tooltip);
 }
