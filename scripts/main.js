@@ -1,4 +1,4 @@
-var container, camera, scene, renderer, effect, clock, controls;
+var container, camera, scene, renderer_css3d, effect, clock, controls;
 var raycaster, mouse, pointer;
 var cameraHolder;
 var json;
@@ -108,6 +108,7 @@ function init()
     initControlPanel();
     initQuanah();
     initImageHolder();
+    initD3Holder();
     // initHPCC();
     // initRenderer();
 
@@ -135,6 +136,28 @@ function initImageHolder()
     // document.getElementById('holder').appendChild( imageHolder );
     domtoimage.toJpeg( tooltip_html ).then( function(url) { tooltip_png.src = url; tooltip_html.style.display = "none";} );
 
+}
+
+function initD3Holder()
+{
+    var chart = d3.parsets().dimensions( ["species","sepal_length","sepal_width","petal_length","petal_width"] );
+	var vis = d3.select( "#vis" ).append( "svg" ).attr( "width" , chart.width() ).attr( "height", chart.height() );
+    d3.csv( "../../TitanicVR/resources/datasets/iris.csv", function(error, csv) { vis.datum( csv ).call( chart ); } );
+    
+    renderer_css3d = new THREE.CSS3DRenderer();
+    renderer_css3d.setSize(width, height);
+    renderer_css3d.domElement.style.position = 'absolute';
+    document.getElementById('container').appendChild(renderer.domElement);
+
+
+    const object = new THREE.CSS3DObject(this)
+    d.object = object;
+
+    object.position.x = d.random.position.x;
+    object.position.y = d.random.position.y;
+    object.position.z = d.random.position.z;
+
+    scene.add(object);
 }
 
 function loadJSON()
@@ -304,4 +327,9 @@ function animate()
     animateControlPanel();
     animateTooltip();
     // console.log(imageHolder.src);
+}
+
+function render()
+{
+    renderer_css3d.render( scene, camera );
 }
