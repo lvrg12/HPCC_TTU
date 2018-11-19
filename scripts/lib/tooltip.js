@@ -10,6 +10,7 @@ var playing =false;
 var dataSpider = [];
 var dataSpider2 = [];
 var levelsR = 6;
+var thresholds = [[3,98], [0,10], [0,99], [1050,17850],[0,200] ];
 var radarChartOptions = {
     w: tipW-50,
     h: tipW+10,
@@ -35,7 +36,10 @@ var scaleopt;
 
 var axes = ["CPU1 Temp", "CPU2 Temp ", "Inlet Temp","Job load",
     "Memory usage", "Fan1 speed", "Fan2 speed", "Fan3 speed", "Fan4 speed", "Power consumption"];
-
+var svg = d3.select("#instructions").append("svg").attr("width", 1000).attr("height",800);
+var rectip = svg.append('rect').attr('id','placetip').attr('x',100).attr('y',100).attr('width',100).attr('height',100)
+.on("click",function(d,i){
+mouseoverNode(d)});
 var tool_tip = d3.tip()
     .attr("class", "d3-tip")
     .attr("id", "d3-tip")
@@ -73,9 +77,9 @@ function addSVG(hideLine){
 
 var svgTip;
 var xScale;
-function mouseoverNode(d1){
+function mouseoverNode(host_name){
     playing = false;
-    var r = hostResults[d1.className.baseVal];
+    var r = json[host_name];
     tool_tip.show(r);
     // 1. create the svgTip
      svgTip = d3.select("#svgTip")
@@ -84,13 +88,13 @@ function mouseoverNode(d1){
         .style("attr","#fff")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
+    r.arrTemperature = r.arrTemperatureCPU1.map((d,i)=> [d,r.arrTemperatureCPU2[i],0]);
+    r.arr = r.arrTemperature;
     // 2. Process the array of historical temperatures
     var arr = [];
     for (var i=0; i<r.arr.length;i++){
         // var a = processData(r.arr[i].data.service.plugin_output, serviceList[0]);
-        var a = processData(r.arrTemperature[i].data.service.plugin_output, serviceList[0]);
+        var a = r.arrTemperature[i];
         var obj = {};
         obj.temp1 = a[0];
         obj.temp2 = a[1];
@@ -281,7 +285,7 @@ function mouseoverNode(d1){
         .style("font-size", "12px")
         .style("text-shadow", "1px 1px 0 rgba(255, 255, 255")
         .attr("font-family", "sans-serif")
-        .text("Host: "+d1.className.baseVal);
+        .text("Host: "+host_name);
     svgTip.append("text")
         .attr("x", -tipH/2)
         .attr("y", -35)
@@ -320,7 +324,7 @@ function mouseoverNode(d1){
     // Update spider data *************************************************************
 
     dataSpider = [];
-    dataSpider.name = d1.className.baseVal;
+    dataSpider.name = host_name;
     if (r.arr.length>0){
         for (var i=0;i<r.arr.length;i++){
             var arrServices = [];
@@ -741,45 +745,3 @@ function summaryRadar () {
 
 
 // Make the DIV element draggable: from W3 code
-dragElement(document.getElementById("Summarynode"));
-
-function dragElement(elmnt) {
-    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    if (document.getElementById(elmnt.id + "header")) {
-        // if present, the header is where you move the DIV from:
-        document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-    } else {
-        // otherwise, move the DIV from anywhere inside the DIV:
-        elmnt.onmousedown = dragMouseDown;
-    }
-
-    function dragMouseDown(e) {
-        e = e || window.event;
-        e.preventDefault();
-        // get the mouse cursor position at startup:
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
-        // call a function whenever the cursor moves:
-        document.onmousemove = elementDrag;
-    }
-
-    function elementDrag(e) {
-        e = e || window.event;
-        e.preventDefault();
-        // calculate the new cursor position:
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        // set the element's new position:
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-    }
-
-    function closeDragElement() {
-        // stop moving when mouse button is released:
-        document.onmouseup = null;
-        document.onmousemove = null;
-    }
-}

@@ -225,6 +225,12 @@ function updateCPUMarker( obj )
     cpu_marker.position.z = pos.z;
 }
 
+$.fn.triggerSVGEvent = function(eventName) {
+    var event = document.createEvent('SVGEvents');
+    event.initEvent(eventName,true,true);
+    this[0].dispatchEvent(event);
+    return $(this);
+   };
 function updateTooltip( host )
 {
     tooltip.visible = true;
@@ -234,5 +240,9 @@ function updateTooltip( host )
     tooltip.position.y = pos.y;
     tooltip.position.z = pos.z - 0.3;
 
-    console.log(tooltip);
+    var tmp = host.name.split("_")
+    var host_name = "compute-"+tmp[1]+"-"+tmp[3]
+    rectip.datum(host_name);
+    $('#placetip').triggerSVGEvent('click');
+    //mouseoverNode(host_name);
 }
