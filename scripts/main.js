@@ -7,7 +7,7 @@ var hostObj = {};
 var timeObj = {};
 
 var ROOM_SIZE = 1;
-var RACK_NUM = 10;
+var RACK_NUM = 1;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
 var TS_NUM = 19;
@@ -113,6 +113,7 @@ function init()
     // initRenderer();
 
     window.addEventListener( 'mousedown', onMouseDown, false );
+    window.addEventListener( 'onclick', onMouseDown, false );
     window.addEventListener( 'touchstart', onDocTouch, false );
     window.addEventListener( 'touchend', onDocRelease, false );
 
