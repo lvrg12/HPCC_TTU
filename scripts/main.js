@@ -124,19 +124,8 @@ function init()
 
 function initImageHolder()
 {
-    // tooltip_html = document.createElement( "div" );
-    // tooltip_html.style.backgroundColor = "white";
-    // tooltip_html.style.width = "14%";
-    // tooltip_html.style.fontSize = "40pt";
-    // tooltip_html.innerHTML = "HELLO WORLD";
-    // document.getElementById('holder').appendChild( tooltip_html );
-    
-    
     tooltip_png = new Image();
     tooltip_png.id = "png_tooltip"
-    // console.log(tooltip_html);
-    // domtoimage.toJpeg( tooltip_html ).then( function(url) { tooltip_png.src = url; tooltip_html.style.display = "none";} );
-
 }
 
 function initD3Holder()

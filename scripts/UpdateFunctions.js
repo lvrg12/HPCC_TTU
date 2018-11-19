@@ -244,8 +244,8 @@ function updateTooltip( host )
     rectip.datum(host_name);
     $('#placetip').triggerSVGEvent('click');
 
-    var tooltip_html = document.getElementsByClassName("radarChart");
-    console.log(tooltip_html);
+    var tooltip_html = document.getElementsByClassName("radarChart")[0];
+    tooltip_html.style.backgroundColor = "gray";
     domtoimage.toJpeg( tooltip_html ).then( function(url) { tooltip_png.src = url; tooltip_html.style.display = "none";} );
        
     tooltip.visible = true;

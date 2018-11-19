@@ -155,7 +155,7 @@ function initQuanah()
     function addTooltip()
     {
         var tt_height = height/3;
-        var tt_width = width/2;
+        var tt_width = height/3;
 
         var tt_texture = new THREE.TextureLoader().load( "media/img/" + serviceList[0] + ".png" );
         var tt_geometry = new THREE.PlaneGeometry( tt_width, tt_height, tt_width );
@@ -173,6 +173,8 @@ function animateTooltip()
     {
         var tt_texture = new THREE.TextureLoader().load( tooltip_png.src );
         tooltip.material = new THREE.MeshBasicMaterial( { map: tt_texture } );
+        tooltip.material.transparency = true;
+        tooltip.material.opacity = 0.8;
         pngLoaded = true;
     }
 }
