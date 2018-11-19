@@ -10,7 +10,12 @@ var playing =false;
 var dataSpider = [];
 var dataSpider2 = [];
 var levelsR = 6;
+
 var thresholds = [[3,98], [0,10], [0,99], [1050,17850],[0,200] ];
+var undefinedValue = undefined;
+var arrColor = ['#110066','#4400ff', '#00cccc', '#00dd00','#ffcc44', '#ff0000', '#660000'];
+var arrThresholds;
+
 var radarChartOptions = {
     w: tipW-50,
     h: tipW+10,
@@ -79,7 +84,7 @@ var svgTip;
 var xScale;
 function mouseoverNode(host_name){
     playing = false;
-    var r = json[host_name];
+    var r = sampleS[host_name];
     tool_tip.show(r);
     // 1. create the svgTip
      svgTip = d3.select("#svgTip")
@@ -88,13 +93,11 @@ function mouseoverNode(host_name){
         .style("attr","#fff")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    r.arrTemperature = r.arrTemperatureCPU1.map((d,i)=> [d,r.arrTemperatureCPU2[i],0]);
-    r.arr = r.arrTemperature;
+
     // 2. Process the array of historical temperatures
     var arr = [];
     for (var i=0; i<r.arr.length;i++){
-        // var a = processData(r.arr[i].data.service.plugin_output, serviceList[0]);
-        var a = r.arrTemperature[i];
+        var a = processData(r.arr[i].data.service.plugin_output, serviceList[0]);
         var obj = {};
         obj.temp1 = a[0];
         obj.temp2 = a[1];
@@ -741,6 +744,54 @@ function summaryRadar () {
     };
     RadarChart(".radarChartsum", dataSpider2, radarChartsumopt,"");
 
+}
+
+function setColorsAndThresholds(s) {
+    for (var i=0; i<serviceList.length;i++){
+        if (s == serviceList[i] && i==1){  // CPU_load
+            dif = (thresholds[i][1]-thresholds[i][0])/4;
+            mid = thresholds[i][0]+(thresholds[i][1]-thresholds[i][0])/2;
+            left=0;
+            arrThresholds = [left,thresholds[i][0], 0, thresholds[i][0]+2*dif, 10, thresholds[i][1], thresholds[i][1]];
+            color = d3.scaleLinear()
+                .domain(arrThresholds)
+                .range(arrColor)
+                .interpolate(d3.interpolateHcl); //interpolateHsl interpolateHcl interpolateRgb
+            opa = d3.scaleLinear()
+                .domain([left,thresholds[i][0],thresholds[i][0]+dif, thresholds[i][0]+2*dif, thresholds[i][0]+3*dif, thresholds[i][1], thresholds[i][1]+dif])
+                .range([1,1,0.3,0.06,0.3,1,1]);
+
+        }
+        else if (s == serviceList[i] && i==2){  // Memory_usage
+            dif = (thresholds[i][1]-thresholds[i][0])/4;
+            mid = thresholds[i][0]+(thresholds[i][1]-thresholds[i][0])/2;
+            left=0;
+            arrThresholds = [left,thresholds[i][0], 0, thresholds[i][0]+2*dif, 98, thresholds[i][1], thresholds[i][1]];
+            color = d3.scaleLinear()
+                .domain(arrThresholds)
+                .range(arrColor)
+                .interpolate(d3.interpolateHcl); //interpolateHsl interpolateHcl interpolateRgb
+            opa = d3.scaleLinear()
+                .domain([left,thresholds[i][0],thresholds[i][0]+dif, thresholds[i][0]+2*dif, thresholds[i][0]+3*dif, thresholds[i][1], thresholds[i][1]+dif])
+                .range([1,1,0.3,0.06,0.3,1,1]);
+
+        }
+        else if (s == serviceList[i]){
+            dif = (thresholds[i][1]-thresholds[i][0])/4;
+            mid = thresholds[i][0]+(thresholds[i][1]-thresholds[i][0])/2;
+            left = thresholds[i][0]-dif;
+            if (left<0 && i!=0) // Temperature can be less than 0
+                left=0;
+            arrThresholds = [left,thresholds[i][0], thresholds[i][0]+dif, thresholds[i][0]+2*dif, thresholds[i][0]+3*dif, thresholds[i][1], thresholds[i][1]+dif];
+            color = d3.scaleLinear()
+                .domain(arrThresholds)
+                .range(arrColor)
+                .interpolate(d3.interpolateHcl); //interpolateHsl interpolateHcl interpolateRgb
+            opa = d3.scaleLinear()
+                .domain([left,thresholds[i][0],thresholds[i][0]+dif, thresholds[i][0]+2*dif, thresholds[i][0]+3*dif, thresholds[i][1], thresholds[i][1]+dif])
+                .range([1,1,0.3,0.06,0.3,1,1]);
+        }
+    }
 }
 
 

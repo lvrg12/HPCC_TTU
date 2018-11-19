@@ -181,6 +181,8 @@ function updatePowerConsumption( keys, obj )
 
 function updateColorRange( service )
 {
+    setColorsAndThresholds( service );
+
     var arrColor, arrDom;
 
     switch( service )
@@ -225,24 +227,114 @@ function updateCPUMarker( obj )
     cpu_marker.position.z = pos.z;
 }
 
-$.fn.triggerSVGEvent = function(eventName) {
-    var event = document.createEvent('SVGEvents');
-    event.initEvent(eventName,true,true);
-    this[0].dispatchEvent(event);
-    return $(this);
-   };
 function updateTooltip( host )
 {
+    // event function
+    $.fn.triggerSVGEvent = function(eventName)
+    {
+        var event = document.createEvent('SVGEvents');
+        event.initEvent(eventName,true,true);
+        this[0].dispatchEvent(event);
+        return $(this);
+    };
+
+    // constructing tooltip
+    var tmp = host.name.split("_")
+    var host_name = "compute-"+tmp[1]+"-"+tmp[3]
+    rectip.datum(host_name);
+    $('#placetip').triggerSVGEvent('click');
+
+    var tooltip_html = document.getElementsByClassName("radarChart");
+    console.log(tooltip_html);
+    domtoimage.toJpeg( tooltip_html ).then( function(url) { tooltip_png.src = url; tooltip_html.style.display = "none";} );
+       
     tooltip.visible = true;
     var pos = new THREE.Vector3().setFromMatrixPosition( camera.matrixWorld )
 
     tooltip.position.x = pos.x;
     tooltip.position.y = pos.y;
     tooltip.position.z = pos.z - 0.3;
+}
 
-    var tmp = host.name.split("_")
-    var host_name = "compute-"+tmp[1]+"-"+tmp[3]
-    rectip.datum(host_name);
-    $('#placetip').triggerSVGEvent('click');
-    //mouseoverNode(host_name);
+function processData(str, serviceName)
+{
+    if (serviceName == serviceList[0]){
+        var a = [];
+        if (str.indexOf("timed out")>=0 || str.indexOf("(No output on stdout)")>=0 || str.indexOf("UNKNOWN")>=0 ){
+            a[0] = undefinedValue;
+            a[1] = undefinedValue;
+            a[2] = undefinedValue;
+        }
+        else{
+            var arrString =  str.split(" ");
+            a[0] = +arrString[2]||undefinedValue;
+            a[1] = +arrString[6]||undefinedValue;
+            a[2] = +arrString[10]||undefinedValue;
+        }
+        return a;
+    }
+    else if (serviceName == serviceList[1]){
+        var a = [];
+        if (str.indexOf("timed out")>=0 || str.indexOf("(No output on stdout)")>=0 || str.indexOf("UNKNOWN")>=0
+            || str.indexOf("CPU Load: null")>=0){
+            a[0] = undefinedValue;
+            a[1] = undefinedValue;
+            a[2] = undefinedValue;
+        }
+        else{
+            var arrString =  str.split("CPU Load: ")[1];
+            a[0] = +arrString;
+            a[1] = undefinedValue;
+            a[2] = undefinedValue;
+        }
+        return a;
+    }
+    else if (serviceName == serviceList[2]) {
+        var a = [];
+        if (str.indexOf("timed out")>=0 || str.indexOf("(No output on stdout)")>=0 || str.indexOf("UNKNOWN")>=0 ){
+            a[0] = undefinedValue;
+            a[1] = undefinedValue;
+            a[2] = undefinedValue;
+        }
+        else{
+            var arrString =  str.split(" Usage Percentage = ")[1].split(" :: ")[0];
+            a[0] = +arrString;
+            a[1] = undefinedValue;
+            a[2] = undefinedValue;
+        }
+        return a;
+    }
+    else if (serviceName == serviceList[3]) {
+        var a = [];
+        if (str.indexOf("timed out")>=0 || str.indexOf("(No output on stdout)")>=0 || str.indexOf("UNKNOWN")>=0 ){
+            a[0] = undefinedValue;
+            a[1] = undefinedValue;
+            a[2] = undefinedValue;
+            a[3] = undefinedValue;
+        }
+        else{
+            var arr4 =  str.split(" RPM ");
+            a[0] = +arr4[0].split("FAN_1 ")[1];
+            a[1] = +arr4[1].split("FAN_2 ")[1];
+            a[2] = +arr4[2].split("FAN_3 ")[1];
+            a[3] = +arr4[3].split("FAN_4 ")[1];
+        }
+        return a;
+    }
+    else if (serviceName == serviceList[4]) {
+        var a = [];
+        if (str.indexOf("timed out")>=0 || str.indexOf("(No output on stdout)")>=0 || str.indexOf("UNKNOWN")>=0 ){
+            a[0] = undefinedValue;
+            a[1] = undefinedValue;
+            a[2] = undefinedValue;
+        }
+        else{
+            var maxConsumtion = 3.2;  // over 100%
+            var arr4 =  str.split(" ");
+            a[0] = +arr4[arr4.length-2]/maxConsumtion;
+            a[1] = undefinedValue;
+            a[2] = undefinedValue;
+        }
+        return a;
+    }
 }

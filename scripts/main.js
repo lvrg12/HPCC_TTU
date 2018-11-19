@@ -7,7 +7,7 @@ var hostObj = {};
 var timeObj = {};
 
 var ROOM_SIZE = 1;
-var RACK_NUM = 1;
+var RACK_NUM = 10;
 var HOST_NUM = 60;
 var CPU_NUM = 2;
 var TS_NUM = 19;
@@ -108,12 +108,12 @@ function init()
     initControlPanel();
     initQuanah();
     initImageHolder();
-    initD3Holder();
+    // initD3Holder();
     // initHPCC();
     // initRenderer();
 
     window.addEventListener( 'mousedown', onMouseDown, false );
-    window.addEventListener( 'onclick', onMouseDown, false );
+    // window.addEventListener( 'onclick', onMouseDown, false );
     window.addEventListener( 'touchstart', onDocTouch, false );
     window.addEventListener( 'touchend', onDocRelease, false );
 
@@ -124,18 +124,18 @@ function init()
 
 function initImageHolder()
 {
-    tooltip_html = document.createElement( "div" );
-    tooltip_html.style.backgroundColor = "lightblue";
-    tooltip_html.style.width = "14%";
-    tooltip_html.style.fontSize = "40pt";
-    tooltip_html.innerHTML = "HELLO WORLD";
-    document.getElementById('holder').appendChild( tooltip_html );
+    // tooltip_html = document.createElement( "div" );
+    // tooltip_html.style.backgroundColor = "white";
+    // tooltip_html.style.width = "14%";
+    // tooltip_html.style.fontSize = "40pt";
+    // tooltip_html.innerHTML = "HELLO WORLD";
+    // document.getElementById('holder').appendChild( tooltip_html );
     
     
     tooltip_png = new Image();
     tooltip_png.id = "png_tooltip"
-    // document.getElementById('holder').appendChild( imageHolder );
-    domtoimage.toJpeg( tooltip_html ).then( function(url) { tooltip_png.src = url; tooltip_html.style.display = "none";} );
+    // console.log(tooltip_html);
+    // domtoimage.toJpeg( tooltip_html ).then( function(url) { tooltip_png.src = url; tooltip_html.style.display = "none";} );
 
 }
 
@@ -172,6 +172,8 @@ function loadJSON()
           json = data
         }
       });
+
+    // json = sampleS;
 }
 
 function initCamera()
